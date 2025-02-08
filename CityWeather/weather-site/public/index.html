@@ -1,0 +1,1119 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="es" xml:lang="es">
+<head>
+<!-- 2025-02-07 Fri 20:58 -->
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Proyecto ICCD32 Arquitectura de Computadores</title>
+<meta name="author" content="Lorena Lopez, Matthew Cedeño." />
+<meta name="generator" content="Org Mode" />
+<link rel="stylesheet" href="https://cdn.simplecss.org/simple.min.css" />
+</head>
+<body>
+<div id="content" class="content">
+<h1 class="title">Proyecto ICCD32 Arquitectura de Computadores</h1>
+<div id="table-of-contents" role="doc-toc">
+<h2>&Iacute;ndice</h2>
+<div id="text-table-of-contents" role="doc-toc">
+<ul>
+<li><a href="#orgd431019">1. City Weather APP</a>
+<ul>
+<li><a href="#orgc2f75f5">1.1. Estructura del proyecto</a></li>
+<li><a href="#org3d8478d">1.2. Descripción del código</a>
+<ul>
+<li><a href="#orgab5fb63">1.2.1. Código Python</a></li>
+</ul>
+</li>
+<li><a href="#org99be4fc">1.3. 1. Configuración de Constantes</a></li>
+<li><a href="#orgca52e2f">1.4. 2. Función get<sub>weather</sub></a></li>
+<li><a href="#orge90fcd7">1.5. 3. Función process</a></li>
+<li><a href="#org94b5fdd">1.6. 4. Función write2csv</a></li>
+<li><a href="#org782c6ec">1.7. 5. Función main</a></li>
+<li><a href="#org4f94036">1.8. Script ejecutable sh</a></li>
+<li><a href="#orgc3eeb61">1.9. Configuración de Crontab</a></li>
+</ul>
+</li>
+<li><a href="#org5a1ebaa">2. Presentación de resultados</a>
+<ul>
+<li><a href="#org8df8423">2.1. Muestra Aleatoria de datos</a></li>
+<li><a href="#orgd13ceb7">2.2. TABLA</a></li>
+<li><a href="#orgfd9caaa">2.3. Gráfica Temperatura vs Tiempo</a></li>
+<li><a href="#orgb94c767">2.4. Gráfica de Humedad vs tiempo</a></li>
+<li><a href="#org0f0075c">2.5. Mover images a public.</a></li>
+<li><a href="#orga267491">2.6. Carga de datos.</a></li>
+<li><a href="#org4e5b183">2.7. Mover las imagenes a public.</a></li>
+</ul>
+</li>
+<li><a href="#org68a66c2">3. Referencias</a></li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-orgd431019" class="outline-2">
+<h2 id="orgd431019"><span class="section-number-2">1.</span> City Weather APP</h2>
+<div class="outline-text-2" id="text-1">
+<p>
+Este es el proyecto de fin de semestre en donde se pretende demostrar
+las destrezas obtenidas durante el transcurso de la asignatura de
+<b><b>Arquitectura de Computadores</b></b>.
+</p>
+
+<ol class="org-ol">
+<li>Conocimientos de sistema operativo Linux</li>
+<li>Conocimientos de Emacs/Jupyter</li>
+<li>Configuración de Entorno para Data Science con Mamba/Anaconda</li>
+<li>Literate Programming</li>
+</ol>
+</div>
+
+<div id="outline-container-orgc2f75f5" class="outline-3">
+<h3 id="orgc2f75f5"><span class="section-number-3">1.1.</span> Estructura del proyecto</h3>
+<div class="outline-text-3" id="text-1-1">
+<pre class="example" id="org75c3da1">
+.
+├── CityTemperatureAnalysis.ipynb
+├── clima-quito-hoy.csv
+├── get-weather.sh
+├── main.py
+├── output.log
+└── weather-site
+    ├── build-site.el
+    ├── build.sh
+    ├── content
+    │   ├── images
+    │   │   ├── plot.png
+    │   │   └── temperature.png
+    │   ├── index.org
+    │   └── index.org_archive
+    └── public
+        ├── images
+        │   ├── plot.png
+        │   └── temperature.png
+        ├── index.html
+        
+
+5 directories, 18 files
+</pre>
+
+<div class="org-src-container">
+<pre class="src src-shell">mkdir CityWeather
+<span style="font-weight: bold;">cd</span> CityWeather
+<span style="font-weight: bold;">pwd</span>
+</pre>
+</div>
+
+<pre class="example">
+/home/lorenalopez/CityWeather
+</pre>
+
+
+<pre class="example">
+/home/lorenalopez/CityWeather/weather-site
+</pre>
+
+
+<div class="org-src-container">
+<pre class="src src-shell"><span style="font-weight: bold;">cd</span> /home/lorenalopez
+mkdir -p CityWeather/weather-site/content
+<span style="font-weight: bold;">cd</span> CityWeather
+</pre>
+</div>
+<pre class="example">
+/home/lorenalopez/CityWeather/weather-site/content
+</pre>
+
+
+<div class="org-src-container">
+<pre class="src src-shell"><span style="font-weight: bold;">cd</span> /home/lorenalopez
+mkdir -p CityWeather/weather-site/public
+<span style="font-weight: bold;">cd</span> CityWeather
+</pre>
+</div>
+<pre class="example">
+/home/lorenalopez/CityWeather/weather-site/public
+</pre>
+
+
+<div class="org-src-container">
+<pre class="src src-shell"><span style="font-weight: bold;">cd</span> /home/lorenalopez
+mkdir -p CityWeather/weather-site/content/images
+<span style="font-weight: bold;">cd</span> CityWeather
+</pre>
+</div>
+<pre class="example">
+/home/lorenalopez/CityWeather/weather-site/content/images
+</pre>
+
+
+<div class="org-src-container">
+<pre class="src src-shell"><span style="font-weight: bold;">cd</span> /home/lorenalopez
+mkdir -p CityWeather/weather-site/public/images
+<span style="font-weight: bold;">cd</span> CityWeather
+</pre>
+</div>
+<pre class="example">
+/home/lorenalopez/CityWeather/weather-site/public/images
+</pre>
+</div>
+</div>
+
+<div id="outline-container-org3d8478d" class="outline-3">
+<h3 id="org3d8478d"><span class="section-number-3">1.2.</span> Descripción del código</h3>
+<div class="outline-text-3" id="text-1-2">
+</div>
+<div id="outline-container-orgab5fb63" class="outline-4">
+<h4 id="orgab5fb63"><span class="section-number-4">1.2.1.</span> Código Python</h4>
+</div>
+</div>
+
+<div id="outline-container-org99be4fc" class="outline-3">
+<h3 id="org99be4fc"><span class="section-number-3">1.3.</span> 1. Configuración de Constantes</h3>
+<div class="outline-text-3" id="text-1-3">
+<div class="org-src-container">
+<pre class="src src-python">
+<span style="font-weight: bold; font-style: italic;">MADRID_LAT</span> = 40.4168  <span style="font-weight: bold; font-style: italic;"># </span><span style="font-weight: bold; font-style: italic;">Latitud de Madrid</span>
+<span style="font-weight: bold; font-style: italic;">MADRID_LONGITUDE</span> = -3.7038  <span style="font-weight: bold; font-style: italic;"># </span><span style="font-weight: bold; font-style: italic;">Longitud de Madrid</span>
+<span style="font-weight: bold; font-style: italic;">API_KEY</span> = <span style="font-style: italic;">"dd272e4e6c6073d32fc685ff8dc91569"</span>
+<span style="font-weight: bold; font-style: italic;">FILE_NAME</span> = <span style="font-style: italic;">"/home/lorenalopez/CityWeather/clima-madrid-hoy.csv"</span>
+</pre>
+</div>
+
+<p>
+Define las constantes necesarias para la solicitud a la API, incluyendo las coordenadas de la ciudad, la clave API y el nombre del archivo CSV donde se guardarán los datos.
+</p>
+</div>
+</div>
+
+<div id="outline-container-orgca52e2f" class="outline-3">
+<h3 id="orgca52e2f"><span class="section-number-3">1.4.</span> 2. Función get<sub>weather</sub></h3>
+<div class="outline-text-3" id="text-1-4">
+<div class="org-src-container">
+<pre class="src src-python"><span style="font-weight: bold;">def</span> <span style="font-weight: bold;">get_weather</span>(lat, lon, api):
+<span style="font-weight: bold; font-style: italic;">url</span> = f<span style="font-style: italic;">"http://api.openweathermap.org/data/2.5/weather?lat=</span>{lat}<span style="font-style: italic;">&amp;lon=</span>{lon}<span style="font-style: italic;">&amp;appid=</span>{api}<span style="font-style: italic;">&amp;units=metric"</span>
+<span style="font-weight: bold; font-style: italic;">response</span> = requests.get(url)
+<span style="font-weight: bold;">if</span> response.status_code == 200:
+<span style="font-weight: bold;">return</span> response.json()
+<span style="font-weight: bold;">else</span>:
+<span style="font-weight: bold;">return</span> {<span style="font-style: italic;">"cod"</span>: response.status_code}
+</pre>
+</div>
+
+<p>
+Construye la URL para la solicitud a la API y realiza una solicitud GET. Devuelve la respuesta en formato JSON si la solicitud es exitosa, o un diccionario con el código de error si la solicitud falla.
+</p>
+</div>
+</div>
+
+<div id="outline-container-orge90fcd7" class="outline-3">
+<h3 id="orge90fcd7"><span class="section-number-3">1.5.</span> 3. Función process</h3>
+<div class="outline-text-3" id="text-1-5">
+<div class="org-src-container">
+<pre class="src src-python"><span style="font-weight: bold;">def</span> <span style="font-weight: bold;">process</span>(json):
+<span style="font-weight: bold; font-style: italic;">normalized_dict</span> = {
+<span style="font-style: italic;">"Fecha"</span>: datetime.now().strftime(<span style="font-style: italic;">"%Y-%m-%d %H:%M:%S"</span>),
+<span style="font-style: italic;">"Temperatura"</span>: json[<span style="font-style: italic;">"main"</span>][<span style="font-style: italic;">"temp"</span>],
+<span style="font-style: italic;">"Humedad"</span>: json[<span style="font-style: italic;">"main"</span>][<span style="font-style: italic;">"humidity"</span>],
+<span style="font-style: italic;">"Presi&#243;n"</span>: json[<span style="font-style: italic;">"main"</span>][<span style="font-style: italic;">"pressure"</span>],
+<span style="font-style: italic;">"Velocidad del viento"</span>: json[<span style="font-style: italic;">"wind"</span>][<span style="font-style: italic;">"speed"</span>],
+<span style="font-style: italic;">"dt"</span>: json.get(<span style="font-style: italic;">"dt"</span>, <span style="font-style: italic;">"N/A"</span>),
+<span style="font-style: italic;">"coord_lon"</span>: json[<span style="font-style: italic;">"coord"</span>].get(<span style="font-style: italic;">"lon"</span>, <span style="font-style: italic;">"N/A"</span>),
+<span style="font-style: italic;">"coord_lat"</span>: json[<span style="font-style: italic;">"coord"</span>].get(<span style="font-style: italic;">"lat"</span>, <span style="font-style: italic;">"N/A"</span>),
+<span style="font-style: italic;">"weather_0_id"</span>: json[<span style="font-style: italic;">"weather"</span>][0].get(<span style="font-style: italic;">"id"</span>, <span style="font-style: italic;">"N/A"</span>),
+<span style="font-style: italic;">"weather_0_main"</span>: json[<span style="font-style: italic;">"weather"</span>][0].get(<span style="font-style: italic;">"main"</span>, <span style="font-style: italic;">"N/A"</span>),
+<span style="font-style: italic;">"weather_0_description"</span>: json[<span style="font-style: italic;">"weather"</span>][0].get(<span style="font-style: italic;">"description"</span>, <span style="font-style: italic;">"N/A"</span>),
+<span style="font-style: italic;">"weather_0_icon"</span>: json[<span style="font-style: italic;">"weather"</span>][0].get(<span style="font-style: italic;">"icon"</span>, <span style="font-style: italic;">"N/A"</span>),
+<span style="font-style: italic;">"base"</span>: json.get(<span style="font-style: italic;">"base"</span>, <span style="font-style: italic;">"N/A"</span>),
+<span style="font-style: italic;">"main_temp"</span>: json[<span style="font-style: italic;">"main"</span>].get(<span style="font-style: italic;">"temp"</span>, <span style="font-style: italic;">"N/A"</span>),
+<span style="font-style: italic;">"main_feels_like"</span>: json[<span style="font-style: italic;">"main"</span>].get(<span style="font-style: italic;">"feels_like"</span>, <span style="font-style: italic;">"N/A"</span>),
+<span style="font-style: italic;">"visibility"</span>: json.get(<span style="font-style: italic;">"visibility"</span>, <span style="font-style: italic;">"N/A"</span>),
+<span style="font-style: italic;">"wind_speed"</span>: json[<span style="font-style: italic;">"wind"</span>].get(<span style="font-style: italic;">"speed"</span>, <span style="font-style: italic;">"N/A"</span>),
+<span style="font-style: italic;">"wind_deg"</span>: json[<span style="font-style: italic;">"wind"</span>].get(<span style="font-style: italic;">"deg"</span>, <span style="font-style: italic;">"N/A"</span>),
+<span style="font-style: italic;">"clouds_all"</span>: json.get(<span style="font-style: italic;">"clouds"</span>, {}).get(<span style="font-style: italic;">"all"</span>, <span style="font-style: italic;">"N/A"</span>),
+<span style="font-style: italic;">"sys_type"</span>: json.get(<span style="font-style: italic;">"sys"</span>, {}).get(<span style="font-style: italic;">"type"</span>, <span style="font-style: italic;">"N/A"</span>),
+<span style="font-style: italic;">"sys_id"</span>: json.get(<span style="font-style: italic;">"sys"</span>, {}).get(<span style="font-style: italic;">"id"</span>, <span style="font-style: italic;">"N/A"</span>),
+<span style="font-style: italic;">"sys_country"</span>: json.get(<span style="font-style: italic;">"sys"</span>, {}).get(<span style="font-style: italic;">"country"</span>, <span style="font-style: italic;">"N/A"</span>),
+<span style="font-style: italic;">"sys_sunrise"</span>: json.get(<span style="font-style: italic;">"sys"</span>, {}).get(<span style="font-style: italic;">"sunrise"</span>, <span style="font-style: italic;">"N/A"</span>),
+<span style="font-style: italic;">"sys_sunset"</span>: json.get(<span style="font-style: italic;">"sys"</span>, {}).get(<span style="font-style: italic;">"sunset"</span>, <span style="font-style: italic;">"N/A"</span>),
+<span style="font-style: italic;">"timezone"</span>: json.get(<span style="font-style: italic;">"timezone"</span>, <span style="font-style: italic;">"N/A"</span>),
+<span style="font-style: italic;">"id"</span>: json.get(<span style="font-style: italic;">"id"</span>, <span style="font-style: italic;">"N/A"</span>),
+<span style="font-style: italic;">"name"</span>: json.get(<span style="font-style: italic;">"name"</span>, <span style="font-style: italic;">"N/A"</span>),
+<span style="font-style: italic;">"cod"</span>: json.get(<span style="font-style: italic;">"cod"</span>, <span style="font-style: italic;">"N/A"</span>),
+}
+<span style="font-weight: bold;">return</span> normalized_dict
+</pre>
+</div>
+
+<p>
+Normaliza los datos JSON obtenidos de la API en un diccionario con campos estándar para ser guardados en el archivo CSV. Incluye la fecha y hora actuales y maneja posibles valores ausentes.
+</p>
+</div>
+</div>
+
+<div id="outline-container-org94b5fdd" class="outline-3">
+<h3 id="org94b5fdd"><span class="section-number-3">1.6.</span> 4. Función write2csv</h3>
+<div class="outline-text-3" id="text-1-6">
+<div class="org-src-container">
+<pre class="src src-python"><span style="font-weight: bold;">def</span> <span style="font-weight: bold;">write2csv</span>(json_response, csv_filename):
+<span style="font-weight: bold; font-style: italic;">fieldnames</span> = [
+<span style="font-style: italic;">"Fecha"</span>, <span style="font-style: italic;">"Temperatura"</span>, <span style="font-style: italic;">"Humedad"</span>, <span style="font-style: italic;">"Presi&#243;n"</span>, <span style="font-style: italic;">"Velocidad del viento"</span>,
+<span style="font-style: italic;">"dt"</span>, <span style="font-style: italic;">"coord_lon"</span>, <span style="font-style: italic;">"coord_lat"</span>, <span style="font-style: italic;">"weather_0_id"</span>, <span style="font-style: italic;">"weather_0_main"</span>,
+<span style="font-style: italic;">"weather_0_description"</span>, <span style="font-style: italic;">"weather_0_icon"</span>, <span style="font-style: italic;">"base"</span>, <span style="font-style: italic;">"main_temp"</span>,
+<span style="font-style: italic;">"main_feels_like"</span>, <span style="font-style: italic;">"visibility"</span>, <span style="font-style: italic;">"wind_speed"</span>, <span style="font-style: italic;">"wind_deg"</span>,
+<span style="font-style: italic;">"clouds_all"</span>, <span style="font-style: italic;">"sys_type"</span>, <span style="font-style: italic;">"sys_id"</span>, <span style="font-style: italic;">"sys_country"</span>, <span style="font-style: italic;">"sys_sunrise"</span>,
+<span style="font-style: italic;">"sys_sunset"</span>, <span style="font-style: italic;">"timezone"</span>, <span style="font-style: italic;">"id"</span>, <span style="font-style: italic;">"name"</span>, <span style="font-style: italic;">"cod"</span>
+]
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org782c6ec" class="outline-3">
+<h3 id="org782c6ec"><span class="section-number-3">1.7.</span> 5. Función main</h3>
+<div class="outline-text-3" id="text-1-7">
+<div class="org-src-container">
+<pre class="src src-python"><span style="font-weight: bold;">def</span> <span style="font-weight: bold;">main</span>():
+    <span style="font-weight: bold;">print</span>(<span style="font-style: italic;">"===== Bienvenido a Madrid-Clima ====="</span>)
+    <span style="font-weight: bold; font-style: italic;">madrid_weather</span> = get_weather(lat=MADRID_LAT, lon=MADRID_LONGITUDE, api=API_KEY)
+
+    <span style="font-weight: bold;">if</span> madrid_weather[<span style="font-style: italic;">'cod'</span>] != 404:
+        <span style="font-weight: bold; font-style: italic;">processed_weather</span> = process(madrid_weather)
+        write2csv(processed_weather, FILE_NAME)
+        <span style="font-weight: bold;">print</span>(<span style="font-style: italic;">"Datos climatol&#243;gicos guardados correctamente en"</span>, FILE_NAME)
+    <span style="font-weight: bold;">else</span>:
+        <span style="font-weight: bold;">print</span>(<span style="font-style: italic;">"Ciudad no disponible o API KEY no v&#225;lida"</span>)
+
+<span style="font-weight: bold;">if</span> <span style="font-weight: bold;">__name__</span> == <span style="font-style: italic;">'__main__'</span>:
+    main()
+</pre>
+</div>
+
+<p>
+Es el punto de entrada del script. Imprime un mensaje de bienvenida, obtiene los datos meteorológicos, los procesa y los guarda en el archivo CSV. Maneja errores en caso de que la ciudad no esté disponible o la clave de API sea inválida.
+</p>
+</div>
+</div>
+
+
+<div id="outline-container-org4f94036" class="outline-3">
+<h3 id="org4f94036"><span class="section-number-3">1.8.</span> Script ejecutable sh</h3>
+<div class="outline-text-3" id="text-1-8">
+<div class="org-src-container">
+<pre class="src src-shell">which sh
+</pre>
+</div>
+
+<pre class="example">
+/usr/bin/sh
+</pre>
+
+
+<div class="org-src-container">
+<pre class="src src-shell">which mamba
+</pre>
+</div>
+
+<pre class="example">
+/home/lorenalopez/miniforge3/bin/mamba
+</pre>
+
+
+<div class="org-src-container">
+<pre class="src src-shell">touch ~/CityWeather/get-weather.sh
+ls -l ~/CityWeather/get-weather.sh  <span style="font-weight: bold; font-style: italic;"># </span><span style="font-weight: bold; font-style: italic;">Verifica que se haya creado</span>
+</pre>
+</div>
+
+<pre class="example">
+-rw-r--r-- 1 lorenalopez lorenalopez 0 Feb  7 20:03 /home/lorenalopez/CityWeather/get-weather.sh
+</pre>
+
+
+
+<div class="org-src-container">
+<pre class="src src-shell"><span style="font-weight: bold;">echo</span> <span style="font-style: italic;">'#!/usr/bin/sh'</span> &gt; ~/CityWeather/get-weather.sh
+<span style="font-weight: bold;">echo</span> <span style="font-style: italic;">'source /home/lorenalopez/miniforge3/etc/profile.d/conda.sh'</span> &gt;&gt; ~/CityWeather/get-weather.sh
+<span style="font-weight: bold;">echo</span> <span style="font-style: italic;">'eval "$(</span><span style="font-weight: bold;">conda shell.bash hook</span><span style="font-style: italic;">)"'</span> &gt;&gt; ~/CityWeather/get-weather.sh
+<span style="font-weight: bold;">echo</span> <span style="font-style: italic;">'conda activate iccd332'</span> &gt;&gt; ~/CityWeather/get-weather.sh
+<span style="font-weight: bold;">echo</span> <span style="font-style: italic;">'python /home/lorenalopez/CityWeather/main.py'</span> &gt;&gt; ~/CityWeather/get-weather.sh
+cat ~/CityWeather/get-weather.sh  <span style="font-weight: bold; font-style: italic;"># </span><span style="font-weight: bold; font-style: italic;">Muestra el contenido</span>
+</pre>
+</div>
+
+<pre class="example">
+#!/usr/bin/sh
+source /home/lorenalopez/miniforge3/etc/profile.d/conda.sh
+eval "$(conda shell.bash hook)"
+conda activate iccd332
+python /home/lorenalopez/CityWeather/main.py
+</pre>
+
+
+
+<div class="org-src-container">
+<pre class="src src-shell">chmod +x ~/CityWeather/get-weather.sh
+ls -l ~/CityWeather/get-weather.sh  <span style="font-weight: bold; font-style: italic;"># </span><span style="font-weight: bold; font-style: italic;">Verifica los permisos</span>
+</pre>
+</div>
+
+<pre class="example">
+-rwxr-xr-x 1 lorenalopez lorenalopez 173 Feb  7  2025 /home/lorenalopez/CityWeather/get-weather.sh
+</pre>
+
+
+<div class="org-src-container">
+<pre class="src src-shell">~/CityWeather/get-weather.sh
+</pre>
+</div>
+
+<pre class="example">
+===== Bienvenido a Madrid-Clima =====
+Datos climatológicos guardados correctamente en /home/lorenalopez/CityWeather/clima-madrid-hoy.csv
+</pre>
+
+
+<div class="org-src-container">
+<pre class="src src-shell">chmod +x /home/lorenalopez/CityWeather/get-weather.sh
+</pre>
+</div>
+
+<div class="org-src-container">
+<pre class="src src-shell">ls -l /home/lorenalopez/CityWeather/get-weather.sh <span style="font-weight: bold; font-style: italic;">#</span><span style="font-weight: bold; font-style: italic;">para verificar</span>
+</pre>
+</div>
+
+<pre class="example">
+-rwxr-xr-x 1 lorenalopez lorenalopez 173 Feb  7  2025 /home/lorenalopez/CityWeather/get-weather.sh
+</pre>
+</div>
+</div>
+
+<div id="outline-container-orgc3eeb61" class="outline-3">
+<h3 id="orgc3eeb61"><span class="section-number-3">1.9.</span> Configuración de Crontab</h3>
+<div class="outline-text-3" id="text-1-9">
+<p>
+Se indica la configuración realizada en crontab para la adquisición de datos
+</p>
+
+<div class="org-src-container">
+<pre class="src src-shell">*/15 * * * * /usr/bin/python3 /home/lorenalopez/CityWeather/main.py &gt;&gt; /home/lorenalopez/CityWeather/output.log 2&gt;&amp;1
+</pre>
+</div>
+
+<ul class="org-ul">
+<li>Recuerde remplazar &lt;City&gt; por el nombre de la ciudad que analice</li>
+<li>Recuerde ajustar el tiempo para potenciar tomar datos nuevos</li>
+<li>Recuerde que <code>2&gt;&amp;1</code> permite guardar en <code>output.log</code> tanto la salida
+del programa como los errores en la ejecución.</li>
+</ul>
+</div>
+</div>
+</div>
+<div id="outline-container-org5a1ebaa" class="outline-2">
+<h2 id="org5a1ebaa"><span class="section-number-2">2.</span> Presentación de resultados</h2>
+<div class="outline-text-2" id="text-2">
+<p>
+Para la pressentación de resultados se utilizan las librerías de Python:
+</p>
+<ul class="org-ul">
+<li>matplotlib</li>
+<li>pandas</li>
+</ul>
+
+<p>
+Alternativamente como pudo estudiar en el Jupyter Notebook
+<a href="https://github.com/LeninGF/EPN-Lectures/blob/main/iccd332ArqComp-2024-A/Proyectos/CityWeather/CityTemperatureAnalysis.ipynb">CityTemperatureAnalysis.ipynb</a>, existen librerías alternativas que se
+pueden utilizar para presentar los resultados gráficos. En ambos
+casos, para que funcione los siguientes bloques de código, es
+necesario que realice la instalación de los paquetes usando <code>mamba
+install &lt;nombre-paquete&gt;</code>
+</p>
+</div>
+
+<div id="outline-container-org8df8423" class="outline-3">
+<h3 id="org8df8423"><span class="section-number-3">2.1.</span> Muestra Aleatoria de datos</h3>
+<div class="outline-text-3" id="text-2-1">
+<p>
+Presentar una muestra de 10 valores aleatorios de los datos obtenidos.
+</p>
+<div class="org-src-container">
+<label class="org-src-name"><span class="listing-number">Listado de programa 1 </span>Lectura de archivo csv</label><pre class="src src-python"><span style="font-weight: bold;">import</span> os
+<span style="font-weight: bold;">import</span> pandas <span style="font-weight: bold;">as</span> pd
+<span style="font-weight: bold; font-style: italic;"># </span><span style="font-weight: bold; font-style: italic;">lectura del archivo csv obtenido</span>
+<span style="font-weight: bold; font-style: italic;">df</span> = pd.read_csv(<span style="font-style: italic;">'/home/lorenalopez/CityWeather/clima-madrid-hoy.csv'</span>)
+<span style="font-weight: bold; font-style: italic;"># </span><span style="font-weight: bold; font-style: italic;">se imprime la estructura del dataframe en forma de filas x columnas</span>
+<span style="font-weight: bold;">print</span>(df.shape)
+</pre>
+</div>
+
+<p>
+Resultado del número de filas y columnas leídos del archivo csv.
+</p>
+</div>
+</div>
+
+
+<div id="outline-container-orgd13ceb7" class="outline-3">
+<h3 id="orgd13ceb7"><span class="section-number-3">2.2.</span> TABLA</h3>
+<div class="outline-text-3" id="text-2-2">
+<div class="org-src-container">
+<pre class="src src-python"><span style="font-weight: bold; font-style: italic;"># </span><span style="font-weight: bold; font-style: italic;">Convertir la columna Fecha a datetime si a&#250;n no lo est&#225;</span>
+<span style="font-weight: bold; font-style: italic;">df</span>[<span style="font-style: italic;">"Fecha"</span>] = pd.to_datetime(df[<span style="font-style: italic;">"Fecha"</span>], errors=<span style="font-style: italic;">"coerce"</span>)
+<span style="font-weight: bold; font-style: italic;"># </span><span style="font-weight: bold; font-style: italic;">Ordenar por la fecha m&#225;s reciente</span>
+<span style="font-weight: bold; font-style: italic;">df</span> = df.sort_values(<span style="font-style: italic;">"Fecha"</span>, ascending=<span style="font-weight: bold; text-decoration: underline;">False</span>)
+<span style="font-weight: bold; font-style: italic;"># </span><span style="font-weight: bold; font-style: italic;">Seleccionar las &#250;ltimas 10 filas</span>
+<span style="font-weight: bold; font-style: italic;">table1</span> = df.head(10)
+<span style="font-weight: bold; font-style: italic;"># </span><span style="font-weight: bold; font-style: italic;">Convertir todas las columnas a strings para evitar desalineaci&#243;n</span>
+<span style="font-weight: bold; font-style: italic;">table1</span> = table1.astype(<span style="font-weight: bold;">str</span>)
+<span style="font-weight: bold; font-style: italic;"># </span><span style="font-weight: bold; font-style: italic;">Crear la tabla asegurando que las columnas est&#225;n alineadas</span>
+<span style="font-weight: bold; font-style: italic;">table</span> = [<span style="font-weight: bold;">list</span>(table1.columns)] + table1.values.tolist()
+table
+</pre>
+</div>
+
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="org-left" />
+
+<col  class="org-right" />
+
+<col  class="org-right" />
+
+<col  class="org-right" />
+
+<col  class="org-right" />
+
+<col  class="org-right" />
+
+<col  class="org-right" />
+
+<col  class="org-right" />
+
+<col  class="org-right" />
+
+<col  class="org-left" />
+
+<col  class="org-left" />
+
+<col  class="org-right" />
+
+<col  class="org-left" />
+
+<col  class="org-right" />
+
+<col  class="org-right" />
+
+<col  class="org-right" />
+
+<col  class="org-right" />
+
+<col  class="org-right" />
+
+<col  class="org-right" />
+
+<col  class="org-right" />
+
+<col  class="org-right" />
+
+<col  class="org-left" />
+
+<col  class="org-right" />
+
+<col  class="org-right" />
+
+<col  class="org-right" />
+
+<col  class="org-right" />
+
+<col  class="org-left" />
+
+<col  class="org-right" />
+</colgroup>
+<tbody>
+<tr>
+<td class="org-left">Fecha</td>
+<td class="org-right">Temperatura</td>
+<td class="org-right">Humedad</td>
+<td class="org-right">Presión</td>
+<td class="org-right">Velocidad del viento</td>
+<td class="org-right">dt</td>
+<td class="org-right">coord<sub>lon</sub></td>
+<td class="org-right">coord<sub>lat</sub></td>
+<td class="org-right">weather<sub>0</sub><sub>id</sub></td>
+<td class="org-left">weather<sub>0</sub><sub>main</sub></td>
+<td class="org-left">weather<sub>0</sub><sub>description</sub></td>
+<td class="org-right">weather<sub>0</sub><sub>icon</sub></td>
+<td class="org-left">base</td>
+<td class="org-right">main<sub>temp</sub></td>
+<td class="org-right">main<sub>feels</sub><sub>like</sub></td>
+<td class="org-right">visibility</td>
+<td class="org-right">wind<sub>speed</sub></td>
+<td class="org-right">wind<sub>deg</sub></td>
+<td class="org-right">clouds<sub>all</sub></td>
+<td class="org-right">sys<sub>type</sub></td>
+<td class="org-right">sys<sub>id</sub></td>
+<td class="org-left">sys<sub>country</sub></td>
+<td class="org-right">sys<sub>sunrise</sub></td>
+<td class="org-right">sys<sub>sunset</sub></td>
+<td class="org-right">timezone</td>
+<td class="org-right">id</td>
+<td class="org-left">name</td>
+<td class="org-right">cod</td>
+</tr>
+
+<tr>
+<td class="org-left">2025-02-07 19:15:02</td>
+<td class="org-right">5.97</td>
+<td class="org-right">95</td>
+<td class="org-right">1019</td>
+<td class="org-right">6.17</td>
+<td class="org-right">1738973608</td>
+<td class="org-right">-3.6989</td>
+<td class="org-right">40.4197</td>
+<td class="org-right">804</td>
+<td class="org-left">Clouds</td>
+<td class="org-left">overcast clouds</td>
+<td class="org-right">04n</td>
+<td class="org-left">stations</td>
+<td class="org-right">5.97</td>
+<td class="org-right">2.06</td>
+<td class="org-right">9000</td>
+<td class="org-right">6.17</td>
+<td class="org-right">220</td>
+<td class="org-right">100</td>
+<td class="org-right">2</td>
+<td class="org-right">2084029</td>
+<td class="org-left">ES</td>
+<td class="org-right">1738999014</td>
+<td class="org-right">1739036469</td>
+<td class="org-right">3600</td>
+<td class="org-right">6545095</td>
+<td class="org-left">Madrid</td>
+<td class="org-right">200</td>
+</tr>
+
+<tr>
+<td class="org-left">2025-02-07 19:00:02</td>
+<td class="org-right">6.1</td>
+<td class="org-right">95</td>
+<td class="org-right">1019</td>
+<td class="org-right">6.17</td>
+<td class="org-right">1738972742</td>
+<td class="org-right">-3.7038</td>
+<td class="org-right">40.4168</td>
+<td class="org-right">804</td>
+<td class="org-left">Clouds</td>
+<td class="org-left">overcast clouds</td>
+<td class="org-right">04n</td>
+<td class="org-left">stations</td>
+<td class="org-right">6.1</td>
+<td class="org-right">2.23</td>
+<td class="org-right">9000</td>
+<td class="org-right">6.17</td>
+<td class="org-right">220</td>
+<td class="org-right">100</td>
+<td class="org-right">2</td>
+<td class="org-right">2084029</td>
+<td class="org-left">ES</td>
+<td class="org-right">1738999015</td>
+<td class="org-right">1739036470</td>
+<td class="org-right">3600</td>
+<td class="org-right">6545083</td>
+<td class="org-left">Sol</td>
+<td class="org-right">200</td>
+</tr>
+
+<tr>
+<td class="org-left">2025-02-07 18:45:02</td>
+<td class="org-right">6.1</td>
+<td class="org-right">95</td>
+<td class="org-right">1019</td>
+<td class="org-right">6.17</td>
+<td class="org-right">1738971842</td>
+<td class="org-right">-3.7038</td>
+<td class="org-right">40.4168</td>
+<td class="org-right">804</td>
+<td class="org-left">Clouds</td>
+<td class="org-left">overcast clouds</td>
+<td class="org-right">04n</td>
+<td class="org-left">stations</td>
+<td class="org-right">6.1</td>
+<td class="org-right">2.23</td>
+<td class="org-right">9000</td>
+<td class="org-right">6.17</td>
+<td class="org-right">220</td>
+<td class="org-right">100</td>
+<td class="org-right">2</td>
+<td class="org-right">2084029</td>
+<td class="org-left">ES</td>
+<td class="org-right">1738999015</td>
+<td class="org-right">1739036470</td>
+<td class="org-right">3600</td>
+<td class="org-right">6545083</td>
+<td class="org-left">Sol</td>
+<td class="org-right">200</td>
+</tr>
+
+<tr>
+<td class="org-left">2025-02-07 11:46:01</td>
+<td class="org-right">6.8</td>
+<td class="org-right">85</td>
+<td class="org-right">1017</td>
+<td class="org-right">3.6</td>
+<td class="org-right">1738946405</td>
+<td class="org-right">-3.702</td>
+<td class="org-right">40.4213</td>
+<td class="org-right">804</td>
+<td class="org-left">Clouds</td>
+<td class="org-left">overcast clouds</td>
+<td class="org-right">04d</td>
+<td class="org-left">stations</td>
+<td class="org-right">6.8</td>
+<td class="org-right">4.29</td>
+<td class="org-right">10000</td>
+<td class="org-right">3.6</td>
+<td class="org-right">200</td>
+<td class="org-right">100</td>
+<td class="org-right">2</td>
+<td class="org-right">2084029</td>
+<td class="org-left">ES</td>
+<td class="org-right">1738912682</td>
+<td class="org-right">1738949996</td>
+<td class="org-right">3600</td>
+<td class="org-right">3117735</td>
+<td class="org-left">Madrid</td>
+<td class="org-right">200</td>
+</tr>
+
+<tr>
+<td class="org-left">2025-02-07 11:45:02</td>
+<td class="org-right">6.6</td>
+<td class="org-right">87</td>
+<td class="org-right">1017</td>
+<td class="org-right">4.12</td>
+<td class="org-right">1738950302</td>
+<td class="org-right">-3.7038</td>
+<td class="org-right">40.4168</td>
+<td class="org-right">804</td>
+<td class="org-left">Clouds</td>
+<td class="org-left">overcast clouds</td>
+<td class="org-right">04n</td>
+<td class="org-left">stations</td>
+<td class="org-right">6.6</td>
+<td class="org-right">3.76</td>
+<td class="org-right">10000</td>
+<td class="org-right">4.12</td>
+<td class="org-right">180</td>
+<td class="org-right">100</td>
+<td class="org-right">2</td>
+<td class="org-right">2084029</td>
+<td class="org-left">ES</td>
+<td class="org-right">1738912682</td>
+<td class="org-right">1738949997</td>
+<td class="org-right">3600</td>
+<td class="org-right">6545083</td>
+<td class="org-left">Sol</td>
+<td class="org-right">200</td>
+</tr>
+
+<tr>
+<td class="org-left">2025-02-07 11:30:02</td>
+<td class="org-right">6.6</td>
+<td class="org-right">88</td>
+<td class="org-right">1017</td>
+<td class="org-right">4.12</td>
+<td class="org-right">1738949402</td>
+<td class="org-right">-3.7038</td>
+<td class="org-right">40.4168</td>
+<td class="org-right">804</td>
+<td class="org-left">Clouds</td>
+<td class="org-left">overcast clouds</td>
+<td class="org-right">04d</td>
+<td class="org-left">stations</td>
+<td class="org-right">6.6</td>
+<td class="org-right">3.76</td>
+<td class="org-right">10000</td>
+<td class="org-right">4.12</td>
+<td class="org-right">160</td>
+<td class="org-right">100</td>
+<td class="org-right">2</td>
+<td class="org-right">2084029</td>
+<td class="org-left">ES</td>
+<td class="org-right">1738912682</td>
+<td class="org-right">1738949997</td>
+<td class="org-right">3600</td>
+<td class="org-right">6545083</td>
+<td class="org-left">Sol</td>
+<td class="org-right">200</td>
+</tr>
+
+<tr>
+<td class="org-left">2025-02-07 11:15:02</td>
+<td class="org-right">6.63</td>
+<td class="org-right">87</td>
+<td class="org-right">1017</td>
+<td class="org-right">3.09</td>
+<td class="org-right">1738948320</td>
+<td class="org-right">-3.7</td>
+<td class="org-right">40.42</td>
+<td class="org-right">804</td>
+<td class="org-left">Clouds</td>
+<td class="org-left">overcast clouds</td>
+<td class="org-right">04d</td>
+<td class="org-left">stations</td>
+<td class="org-right">6.63</td>
+<td class="org-right">4.4</td>
+<td class="org-right">10000</td>
+<td class="org-right">3.09</td>
+<td class="org-right">200</td>
+<td class="org-right">100</td>
+<td class="org-right">2</td>
+<td class="org-right">2084029</td>
+<td class="org-left">ES</td>
+<td class="org-right">1738912681</td>
+<td class="org-right">1738949995</td>
+<td class="org-right">3600</td>
+<td class="org-right">6545083</td>
+<td class="org-left">Sol</td>
+<td class="org-right">200</td>
+</tr>
+
+<tr>
+<td class="org-left">2025-02-07 10:30:02</td>
+<td class="org-right">6.86</td>
+<td class="org-right">86</td>
+<td class="org-right">1017</td>
+<td class="org-right">3.6</td>
+<td class="org-right">1738945664</td>
+<td class="org-right">-3.7038</td>
+<td class="org-right">40.4168</td>
+<td class="org-right">804</td>
+<td class="org-left">Clouds</td>
+<td class="org-left">overcast clouds</td>
+<td class="org-right">04d</td>
+<td class="org-left">stations</td>
+<td class="org-right">6.86</td>
+<td class="org-right">4.37</td>
+<td class="org-right">10000</td>
+<td class="org-right">3.6</td>
+<td class="org-right">200</td>
+<td class="org-right">100</td>
+<td class="org-right">2</td>
+<td class="org-right">2084029</td>
+<td class="org-left">ES</td>
+<td class="org-right">1738912682</td>
+<td class="org-right">1738949997</td>
+<td class="org-right">3600</td>
+<td class="org-right">6545083</td>
+<td class="org-left">Sol</td>
+<td class="org-right">200</td>
+</tr>
+
+<tr>
+<td class="org-left">2025-02-07 10:15:01</td>
+<td class="org-right">6.03</td>
+<td class="org-right">89</td>
+<td class="org-right">1017</td>
+<td class="org-right">3.09</td>
+<td class="org-right">1738940904</td>
+<td class="org-right">-3.7036</td>
+<td class="org-right">40.4167</td>
+<td class="org-right">701</td>
+<td class="org-left">Mist</td>
+<td class="org-left">mist</td>
+<td class="org-right">50d</td>
+<td class="org-left">stations</td>
+<td class="org-right">6.03</td>
+<td class="org-right">3.68</td>
+<td class="org-right">4000</td>
+<td class="org-right">3.09</td>
+<td class="org-right">200</td>
+<td class="org-right">100</td>
+<td class="org-right">2</td>
+<td class="org-right">2084029</td>
+<td class="org-left">ES</td>
+<td class="org-right">1738912682</td>
+<td class="org-right">1738949997</td>
+<td class="org-right">3600</td>
+<td class="org-right">3117735</td>
+<td class="org-left">Madrid</td>
+<td class="org-right">200</td>
+</tr>
+
+<tr>
+<td class="org-left">2025-02-07 10:15:01</td>
+<td class="org-right">6.67</td>
+<td class="org-right">87</td>
+<td class="org-right">1017</td>
+<td class="org-right">3.6</td>
+<td class="org-right">1738944526</td>
+<td class="org-right">-3.7036</td>
+<td class="org-right">40.4167</td>
+<td class="org-right">803</td>
+<td class="org-left">Clouds</td>
+<td class="org-left">broken clouds</td>
+<td class="org-right">04d</td>
+<td class="org-left">stations</td>
+<td class="org-right">6.67</td>
+<td class="org-right">4.13</td>
+<td class="org-right">10000</td>
+<td class="org-right">3.6</td>
+<td class="org-right">190</td>
+<td class="org-right">75</td>
+<td class="org-right">2</td>
+<td class="org-right">2084029</td>
+<td class="org-left">ES</td>
+<td class="org-right">1738912682</td>
+<td class="org-right">1738949997</td>
+<td class="org-right">3600</td>
+<td class="org-right">6544494</td>
+<td class="org-left">Madrid City Center</td>
+<td class="org-right">200</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+
+
+
+<div id="outline-container-orgfd9caaa" class="outline-3">
+<h3 id="orgfd9caaa"><span class="section-number-3">2.3.</span> Gráfica Temperatura vs Tiempo</h3>
+<div class="outline-text-3" id="text-2-3">
+<p>
+Realizar una gráfica de la Temperatura en el tiempo.
+</p>
+
+
+<p>
+El siguiente cógido permite hacer la gráfica de la temperatura vs
+tiempo para Org 9.7+. Para saber que versión dispone puede ejecutar
+<code>M-x org-version</code>
+</p>
+
+<div class="org-src-container">
+<pre class="src src-python"><span style="font-weight: bold;">import</span> matplotlib.pyplot <span style="font-weight: bold;">as</span> plt
+<span style="font-weight: bold;">import</span> matplotlib.dates <span style="font-weight: bold;">as</span> mdates
+<span style="font-weight: bold; font-style: italic;"># </span><span style="font-weight: bold; font-style: italic;">Convertir la columna dt a formato de fecha si es necesario</span>
+<span style="font-weight: bold; font-style: italic;">df</span>[<span style="font-style: italic;">"dt"</span>] = pd.to_datetime(df[<span style="font-style: italic;">"dt"</span>], unit=<span style="font-style: italic;">"s"</span>, errors=<span style="font-style: italic;">"coerce"</span>)
+<span style="font-weight: bold; font-style: italic;"># </span><span style="font-weight: bold; font-style: italic;">Crear la figura con un tama&#241;o adecuado</span>
+<span style="font-weight: bold; font-style: italic;">fig</span>, <span style="font-weight: bold; font-style: italic;">ax</span> = plt.subplots(figsize=(10, 6))
+<span style="font-weight: bold; font-style: italic;"># </span><span style="font-weight: bold; font-style: italic;">Graficar la temperatura vs tiempo con mejor estilo</span>
+ax.plot(df[<span style="font-style: italic;">"dt"</span>], df[<span style="font-style: italic;">"main_temp"</span>], marker=<span style="font-style: italic;">"o"</span>, linestyle=<span style="font-style: italic;">"-"</span>, color=<span style="font-style: italic;">"red"</span>, label=<span style="font-style: italic;">"Temperatura"</span>)
+<span style="font-weight: bold; font-style: italic;"># </span><span style="font-weight: bold; font-style: italic;">Mejorar la visualizaci&#243;n del eje X con fechas m&#225;s legibles</span>
+ax.xaxis.set_major_locator(mdates.HourLocator(interval=3))  <span style="font-weight: bold; font-style: italic;"># </span><span style="font-weight: bold; font-style: italic;">Mostrar cada 3 horas</span>
+ax.xaxis.set_major_formatter(mdates.DateFormatter(<span style="font-style: italic;">"%d-%m %H:%M"</span>))  <span style="font-weight: bold; font-style: italic;"># </span><span style="font-weight: bold; font-style: italic;">Formato: D&#237;a-Mes Hora:Minutos</span>
+plt.xticks(rotation=45, ha=<span style="font-style: italic;">"right"</span>)  <span style="font-weight: bold; font-style: italic;"># </span><span style="font-weight: bold; font-style: italic;">Rotar etiquetas para evitar sobreposici&#243;n</span>
+plt.title(<span style="font-style: italic;">"Gr&#225;fica Temperatura vs Tiempo en Madrid"</span>, fontsize=14, fontweight=<span style="font-style: italic;">"bold"</span>)
+plt.xlabel(<span style="font-style: italic;">"Fecha y Hora (Hora Local de Madrid)"</span>, fontsize=12)
+plt.ylabel(<span style="font-style: italic;">"Temperatura (&#176;C)"</span>, fontsize=12)
+plt.grid(<span style="font-weight: bold; text-decoration: underline;">True</span>, linestyle=<span style="font-style: italic;">"--"</span>, alpha=0.7)
+plt.legend()
+fig.tight_layout()
+<span style="font-weight: bold; font-style: italic;">fname</span> = <span style="font-style: italic;">"/home/lorenalopez/CityWeather/weather-site/content/images/temperature.png"</span>
+plt.savefig(fname, dpi=300)
+fname
+</pre>
+</div>
+
+
+<div id="org9bcb2a2" class="figure">
+<p><img src="file:///home/lorenalopez/CityWeather/weather-site/content/images/temperature.png" alt="temperature.png" />
+</p>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orgb94c767" class="outline-3">
+<h3 id="orgb94c767"><span class="section-number-3">2.4.</span> Gráfica de Humedad vs tiempo</h3>
+<div class="outline-text-3" id="text-2-4">
+<div class="org-src-container">
+<pre class="src src-python"><span style="font-weight: bold;">import</span> matplotlib.pyplot <span style="font-weight: bold;">as</span> plt
+<span style="font-weight: bold;">import</span> matplotlib.dates <span style="font-weight: bold;">as</span> mdates
+<span style="font-weight: bold; font-style: italic;"># </span><span style="font-weight: bold; font-style: italic;">Convertir la columna dt a formato de fecha si es necesario</span>
+<span style="font-weight: bold; font-style: italic;">df</span>[<span style="font-style: italic;">"dt"</span>] = pd.to_datetime(df[<span style="font-style: italic;">"dt"</span>], unit=<span style="font-style: italic;">"s"</span>, errors=<span style="font-style: italic;">"coerce"</span>)
+<span style="font-weight: bold; font-style: italic;"># </span><span style="font-weight: bold; font-style: italic;">Crear la figura con un tama&#241;o adecuado</span>
+<span style="font-weight: bold; font-style: italic;">fig</span>, <span style="font-weight: bold; font-style: italic;">ax</span> = plt.subplots(figsize=(10, 6))
+ax.plot(df[<span style="font-style: italic;">"dt"</span>], df[<span style="font-style: italic;">"Humedad"</span>], marker=<span style="font-style: italic;">"o"</span>, linestyle=<span style="font-style: italic;">"-"</span>, color=<span style="font-style: italic;">"blue"</span>, label=<span style="font-style: italic;">"Humedad (%)"</span>)
+ax.xaxis.set_major_locator(mdates.HourLocator(interval=3))  <span style="font-weight: bold; font-style: italic;"># </span><span style="font-weight: bold; font-style: italic;">Mostrar cada 3 horas</span>
+ax.xaxis.set_major_formatter(mdates.DateFormatter(<span style="font-style: italic;">"%d-%m %H:%M"</span>))  <span style="font-weight: bold; font-style: italic;"># </span><span style="font-weight: bold; font-style: italic;">Formato: D&#237;a-Mes Hora:Minutos</span>
+plt.xticks(rotation=45, ha=<span style="font-style: italic;">"right"</span>)  <span style="font-weight: bold; font-style: italic;"># </span><span style="font-weight: bold; font-style: italic;">Rotar etiquetas para evitar sobreposici&#243;n</span>
+plt.title(<span style="font-style: italic;">"Gr&#225;fica Humedad vs Tiempo en Madrid"</span>, fontsize=14, fontweight=<span style="font-style: italic;">"bold"</span>)
+plt.xlabel(<span style="font-style: italic;">"Fecha y Hora (Hora Local de Madrid)"</span>, fontsize=12)
+plt.ylabel(<span style="font-style: italic;">"Humedad (%)"</span>, fontsize=12)
+plt.grid(<span style="font-weight: bold; text-decoration: underline;">True</span>, linestyle=<span style="font-style: italic;">"--"</span>, alpha=0.7)
+plt.legend()
+fig.tight_layout()
+
+<span style="font-weight: bold; font-style: italic;">fname</span> = <span style="font-style: italic;">"/home/lorenalopez/CityWeather/weather-site/content/images/humedad_vs_tiempo.png"</span>
+plt.savefig(fname, dpi=300)
+fname
+</pre>
+</div>
+
+
+<div id="org0e556de" class="figure">
+<p><img src="file:///home/lorenalopez/CityWeather/weather-site/content/images/humedad_vs_tiempo.png" alt="humedad_vs_tiempo.png" />
+</p>
+</div>
+</div>
+</div>
+
+
+<div id="outline-container-org0f0075c" class="outline-3">
+<h3 id="org0f0075c"><span class="section-number-3">2.5.</span> Mover images a public.</h3>
+<div class="outline-text-3" id="text-2-5">
+<p>
+Debido a que el archivo index.org se abre dentro de la carpeta
+<i>content</i>, y en cambio el servidor http de emacs se ejecuta desde la
+carpeta <i>public</i> es necesario copiar el archivo a la ubicación
+equivalente en <code>/public/images</code>
+</p>
+
+<p>
+Para que las imágenes generadas en content/images estén disponibles en el servidor web
+de Emacs, hay que copiarlas a public/images.
+</p>
+
+
+<div class="org-src-container">
+<pre class="src src-shell">cp -rfv /home/lorenalopez/CityWeather/weather-site/content/images/* /home/lorenalopez/CityWeather/weather-site/public/images/
+</pre>
+</div>
+
+<pre class="example">
+'/home/lorenalopez/CityWeather/weather-site/content/images/humedad_vs_tiempo.png' -&gt; '/home/lorenalopez/CityWeather/weather-site/public/images/humedad_vs_tiempo.png'
+'/home/lorenalopez/CityWeather/weather-site/content/images/humedad_vs_tiempo.png:Zone.Identifier' -&gt; '/home/lorenalopez/CityWeather/weather-site/public/images/humedad_vs_tiempo.png:Zone.Identifier'
+'/home/lorenalopez/CityWeather/weather-site/content/images/temperature.png' -&gt; '/home/lorenalopez/CityWeather/weather-site/public/images/temperature.png'
+'/home/lorenalopez/CityWeather/weather-site/content/images/temperature.png:Zone.Identifier' -&gt; '/home/lorenalopez/CityWeather/weather-site/public/images/temperature.png:Zone.Identifier'
+</pre>
+
+
+
+
+<p>
+#+begin<sub>src</sub> python :session :results file :exports both
+  import matplotlib.pyplot as plt
+  import matplotlib.dates as mdates
+  import pandas as pd
+</p>
+</div>
+</div>
+
+<div id="outline-container-orga267491" class="outline-3">
+<h3 id="orga267491"><span class="section-number-3">2.6.</span> Carga de datos.</h3>
+<div class="outline-text-3" id="text-2-6">
+<p>
+Este bloque de código se encarga de generar y actualizar las gráficas de <b><b>Temperatura vs Tiempo</b></b>
+y <b><b>Humedad vs Tiempo</b></b> utilizando los datos almacenados en el archivo `clima-madrid-hoy.csv`.
+Debe ejecutarse cada vez que se desee actualizar las gráficas con los datos más recientes. Si se
+cierra Emacs y se vuelve a abrir, es necesario ejecutar nuevamente este bloque para regenerar las
+imágenes. Asimismo, si el archivo de datos ha sido modificado, este código asegurará que las
+gráficas reflejen la información más actualizada.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-python"><span style="font-weight: bold;">import</span> matplotlib.pyplot <span style="font-weight: bold;">as</span> plt
+<span style="font-weight: bold;">import</span> matplotlib.dates <span style="font-weight: bold;">as</span> mdates
+<span style="font-weight: bold;">import</span> pandas <span style="font-weight: bold;">as</span> pd
+
+<span style="font-weight: bold; font-style: italic;"># </span><span style="font-weight: bold; font-style: italic;">Cargar los datos del archivo CSV</span>
+<span style="font-weight: bold; font-style: italic;">df</span> = pd.read_csv(<span style="font-style: italic;">'/home/lorenalopez/CityWeather/clima-madrid-hoy.csv'</span>)
+
+<span style="font-weight: bold; font-style: italic;"># </span><span style="font-weight: bold; font-style: italic;">Convertir 'dt' a formato de fecha si est&#225; en timestamp</span>
+<span style="font-weight: bold; font-style: italic;">df</span>[<span style="font-style: italic;">'dt'</span>] = pd.to_datetime(df[<span style="font-style: italic;">'dt'</span>], unit=<span style="font-style: italic;">'s'</span>)
+
+<span style="font-weight: bold; font-style: italic;"># </span><span style="font-weight: bold; font-style: italic;">----------- Gr&#225;fico de Temperatura vs Tiempo -----------</span>
+<span style="font-weight: bold; font-style: italic;">fig</span>, <span style="font-weight: bold; font-style: italic;">ax</span> = plt.subplots(figsize=(10, 6))
+ax.plot(df[<span style="font-style: italic;">'dt'</span>], df[<span style="font-style: italic;">'main_temp'</span>], marker=<span style="font-style: italic;">"o"</span>, linestyle=<span style="font-style: italic;">"-"</span>, color=<span style="font-style: italic;">"red"</span>, label=<span style="font-style: italic;">"Temperatura"</span>)
+
+<span style="font-weight: bold; font-style: italic;"># </span><span style="font-weight: bold; font-style: italic;">Ajustes del eje X y formato de fechas</span>
+ax.xaxis.set_major_locator(mdates.HourLocator(interval=3))
+ax.xaxis.set_major_formatter(mdates.DateFormatter(<span style="font-style: italic;">'%d-%m %H:%M'</span>))
+plt.xticks(rotation=45, ha=<span style="font-style: italic;">"right"</span>)
+
+<span style="font-weight: bold; font-style: italic;"># </span><span style="font-weight: bold; font-style: italic;">Etiquetas y cuadr&#237;cula</span>
+plt.title(<span style="font-style: italic;">"Gr&#225;fica Temperatura vs Tiempo en Madrid"</span>)
+plt.xlabel(<span style="font-style: italic;">"Fecha y Hora (Hora Local de Madrid)"</span>)
+plt.ylabel(<span style="font-style: italic;">"Temperatura (&#176;C)"</span>)
+plt.grid(<span style="font-weight: bold; text-decoration: underline;">True</span>, linestyle=<span style="font-style: italic;">"--"</span>, alpha=0.7)
+plt.legend()
+
+<span style="font-weight: bold; font-style: italic;"># </span><span style="font-weight: bold; font-style: italic;">Guardar la imagen</span>
+<span style="font-weight: bold; font-style: italic;">fname_temp</span> = <span style="font-style: italic;">'/home/lorenalopez/CityWeather/weather-site/content/images/temperature.png'</span>
+plt.savefig(fname_temp, dpi=300)
+plt.close(fig)  <span style="font-weight: bold; font-style: italic;"># </span><span style="font-weight: bold; font-style: italic;">Evita que se muestre en Emacs</span>
+
+<span style="font-weight: bold; font-style: italic;"># </span><span style="font-weight: bold; font-style: italic;">----------- Gr&#225;fico de Humedad vs Tiempo -----------</span>
+<span style="font-weight: bold; font-style: italic;">fig</span>, <span style="font-weight: bold; font-style: italic;">ax</span> = plt.subplots(figsize=(10, 6))
+ax.plot(df[<span style="font-style: italic;">'dt'</span>], df[<span style="font-style: italic;">'Humedad'</span>], marker=<span style="font-style: italic;">"o"</span>, linestyle=<span style="font-style: italic;">"-"</span>, color=<span style="font-style: italic;">"blue"</span>, label=<span style="font-style: italic;">"Humedad"</span>)
+
+<span style="font-weight: bold; font-style: italic;"># </span><span style="font-weight: bold; font-style: italic;">Ajustes del eje X y formato de fechas</span>
+ax.xaxis.set_major_locator(mdates.HourLocator(interval=3))
+ax.xaxis.set_major_formatter(mdates.DateFormatter(<span style="font-style: italic;">'%d-%m %H:%M'</span>))
+plt.xticks(rotation=45, ha=<span style="font-style: italic;">"right"</span>)
+
+<span style="font-weight: bold; font-style: italic;"># </span><span style="font-weight: bold; font-style: italic;">Etiquetas y cuadr&#237;cula</span>
+plt.title(<span style="font-style: italic;">"Gr&#225;fica Humedad vs Tiempo en Madrid"</span>)
+plt.xlabel(<span style="font-style: italic;">"Fecha y Hora (Hora Local de Madrid)"</span>)
+plt.ylabel(<span style="font-style: italic;">"Humedad (%)"</span>)
+plt.grid(<span style="font-weight: bold; text-decoration: underline;">True</span>, linestyle=<span style="font-style: italic;">"--"</span>, alpha=0.7)
+plt.legend()
+
+<span style="font-weight: bold; font-style: italic;"># </span><span style="font-weight: bold; font-style: italic;">Guardar la imagen</span>
+<span style="font-weight: bold; font-style: italic;">fname_hum</span> = <span style="font-style: italic;">'/home/lorenalopez/CityWeather/weather-site/content/images/humedad_vs_tiempo.png'</span>
+plt.savefig(fname_hum, dpi=300)
+plt.close(fig)  <span style="font-weight: bold; font-style: italic;"># </span><span style="font-weight: bold; font-style: italic;">Evita que se muestre en Emacs</span>
+
+<span style="font-weight: bold; font-style: italic;"># </span><span style="font-weight: bold; font-style: italic;">Devolver las rutas de las im&#225;genes generadas</span>
+[fname_temp, fname_hum]
+</pre>
+</div>
+
+<p>
+[[file:['/home/lorenalopez/CityWeather/weather-site/content/images/temperature.png', '/home/lorenalopez/CityWeather/weather-site/content/images/humedad<sub>vs</sub><sub>tiempo.png</sub>']]]
+</p>
+</div>
+</div>
+
+
+<div id="outline-container-org4e5b183" class="outline-3">
+<h3 id="org4e5b183"><span class="section-number-3">2.7.</span> Mover las imagenes a public.</h3>
+<div class="outline-text-3" id="text-2-7">
+<div class="org-src-container">
+<pre class="src src-shell">cp -rfv /home/lorenalopez/CityWeather/weather-site/content/images/*.png /home/lorenalopez/CityWeather/weather-site/public/images/
+</pre>
+</div>
+
+<pre class="example">
+'/home/lorenalopez/CityWeather/weather-site/content/images/humedad_vs_tiempo.png' -&gt; '/home/lorenalopez/CityWeather/weather-site/public/images/humedad_vs_tiempo.png'
+'/home/lorenalopez/CityWeather/weather-site/content/images/temperature.png' -&gt; '/home/lorenalopez/CityWeather/weather-site/public/images/temperature.png'
+</pre>
+</div>
+</div>
+</div>
+
+
+
+<div id="outline-container-org68a66c2" class="outline-2">
+<h2 id="org68a66c2"><span class="section-number-2">3.</span> Referencias</h2>
+<div class="outline-text-2" id="text-3">
+<ul class="org-ul">
+<li><a href="https://emacs.stackexchange.com/questions/28715/get-pandas-data-frame-as-a-table-in-org-babel">presentar dataframe como tabla en emacs org</a></li>
+<li><a href="https://orgmode.org/worg/org-contrib/babel/languages/ob-doc-python.html">Python Source Code Blocks in Org Mode</a></li>
+<li><a href="https://systemcrafters.net/publishing-websites-with-org-mode/building-the-site/">Systems Crafters Construir tu sitio web con Modo Emacs Org</a></li>
+<li><a href="https://www.youtube.com/watch?v=AfkrzFodoNw">Vídeo Youtube Build Your Website with Org Mode</a></li>
+</ul>
+</div>
+</div>
+</div>
+<div id="postamble" class="status">
+<p class="date">Fecha: 2025-02-07</p>
+<p class="author">Autor: Lorena Lopez, Matthew Cedeño.</p>
+<p class="date">Created: 2025-02-07 Fri 20:58</p>
+</div>
+</body>
+</html>

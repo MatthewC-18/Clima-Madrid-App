@@ -1,0 +1,1286 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="es" xml:lang="es">
+<head>
+<!-- 2025-02-07 Fri 22:30 -->
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Proyecto ICCD32 Arquitectura de Computadores</title>
+<meta name="author" content="Lorena Lopez, Matthew Cedeño." />
+<meta name="generator" content="Org Mode" />
+<style>
+  #content { max-width: 60em; margin: auto; }
+  .title  { text-align: center;
+             margin-bottom: .2em; }
+  .subtitle { text-align: center;
+              font-size: medium;
+              font-weight: bold;
+              margin-top:0; }
+  .todo   { font-family: monospace; color: red; }
+  .done   { font-family: monospace; color: green; }
+  .priority { font-family: monospace; color: orange; }
+  .tag    { background-color: #eee; font-family: monospace;
+            padding: 2px; font-size: 80%; font-weight: normal; }
+  .timestamp { color: #bebebe; }
+  .timestamp-kwd { color: #5f9ea0; }
+  .org-right  { margin-left: auto; margin-right: 0px;  text-align: right; }
+  .org-left   { margin-left: 0px;  margin-right: auto; text-align: left; }
+  .org-center { margin-left: auto; margin-right: auto; text-align: center; }
+  .underline { text-decoration: underline; }
+  #postamble p, #preamble p { font-size: 90%; margin: .2em; }
+  p.verse { margin-left: 3%; }
+  pre {
+    border: 1px solid #e6e6e6;
+    border-radius: 3px;
+    background-color: #f2f2f2;
+    padding: 8pt;
+    font-family: monospace;
+    overflow: auto;
+    margin: 1.2em;
+  }
+  pre.src {
+    position: relative;
+    overflow: auto;
+  }
+  pre.src:before {
+    display: none;
+    position: absolute;
+    top: -8px;
+    right: 12px;
+    padding: 3px;
+    color: #555;
+    background-color: #f2f2f299;
+  }
+  pre.src:hover:before { display: inline; margin-top: 14px;}
+  /* Languages per Org manual */
+  pre.src-asymptote:before { content: 'Asymptote'; }
+  pre.src-awk:before { content: 'Awk'; }
+  pre.src-authinfo::before { content: 'Authinfo'; }
+  pre.src-C:before { content: 'C'; }
+  /* pre.src-C++ doesn't work in CSS */
+  pre.src-clojure:before { content: 'Clojure'; }
+  pre.src-css:before { content: 'CSS'; }
+  pre.src-D:before { content: 'D'; }
+  pre.src-ditaa:before { content: 'ditaa'; }
+  pre.src-dot:before { content: 'Graphviz'; }
+  pre.src-calc:before { content: 'Emacs Calc'; }
+  pre.src-emacs-lisp:before { content: 'Emacs Lisp'; }
+  pre.src-fortran:before { content: 'Fortran'; }
+  pre.src-gnuplot:before { content: 'gnuplot'; }
+  pre.src-haskell:before { content: 'Haskell'; }
+  pre.src-hledger:before { content: 'hledger'; }
+  pre.src-java:before { content: 'Java'; }
+  pre.src-js:before { content: 'Javascript'; }
+  pre.src-latex:before { content: 'LaTeX'; }
+  pre.src-ledger:before { content: 'Ledger'; }
+  pre.src-lisp:before { content: 'Lisp'; }
+  pre.src-lilypond:before { content: 'Lilypond'; }
+  pre.src-lua:before { content: 'Lua'; }
+  pre.src-matlab:before { content: 'MATLAB'; }
+  pre.src-mscgen:before { content: 'Mscgen'; }
+  pre.src-ocaml:before { content: 'Objective Caml'; }
+  pre.src-octave:before { content: 'Octave'; }
+  pre.src-org:before { content: 'Org mode'; }
+  pre.src-oz:before { content: 'OZ'; }
+  pre.src-plantuml:before { content: 'Plantuml'; }
+  pre.src-processing:before { content: 'Processing.js'; }
+  pre.src-python:before { content: 'Python'; }
+  pre.src-R:before { content: 'R'; }
+  pre.src-ruby:before { content: 'Ruby'; }
+  pre.src-sass:before { content: 'Sass'; }
+  pre.src-scheme:before { content: 'Scheme'; }
+  pre.src-screen:before { content: 'Gnu Screen'; }
+  pre.src-sed:before { content: 'Sed'; }
+  pre.src-sh:before { content: 'shell'; }
+  pre.src-sql:before { content: 'SQL'; }
+  pre.src-sqlite:before { content: 'SQLite'; }
+  /* additional languages in org.el's org-babel-load-languages alist */
+  pre.src-forth:before { content: 'Forth'; }
+  pre.src-io:before { content: 'IO'; }
+  pre.src-J:before { content: 'J'; }
+  pre.src-makefile:before { content: 'Makefile'; }
+  pre.src-maxima:before { content: 'Maxima'; }
+  pre.src-perl:before { content: 'Perl'; }
+  pre.src-picolisp:before { content: 'Pico Lisp'; }
+  pre.src-scala:before { content: 'Scala'; }
+  pre.src-shell:before { content: 'Shell Script'; }
+  pre.src-ebnf2ps:before { content: 'ebfn2ps'; }
+  /* additional language identifiers per "defun org-babel-execute"
+       in ob-*.el */
+  pre.src-cpp:before  { content: 'C++'; }
+  pre.src-abc:before  { content: 'ABC'; }
+  pre.src-coq:before  { content: 'Coq'; }
+  pre.src-groovy:before  { content: 'Groovy'; }
+  /* additional language identifiers from org-babel-shell-names in
+     ob-shell.el: ob-shell is the only babel language using a lambda to put
+     the execution function name together. */
+  pre.src-bash:before  { content: 'bash'; }
+  pre.src-csh:before  { content: 'csh'; }
+  pre.src-ash:before  { content: 'ash'; }
+  pre.src-dash:before  { content: 'dash'; }
+  pre.src-ksh:before  { content: 'ksh'; }
+  pre.src-mksh:before  { content: 'mksh'; }
+  pre.src-posh:before  { content: 'posh'; }
+  /* Additional Emacs modes also supported by the LaTeX listings package */
+  pre.src-ada:before { content: 'Ada'; }
+  pre.src-asm:before { content: 'Assembler'; }
+  pre.src-caml:before { content: 'Caml'; }
+  pre.src-delphi:before { content: 'Delphi'; }
+  pre.src-html:before { content: 'HTML'; }
+  pre.src-idl:before { content: 'IDL'; }
+  pre.src-mercury:before { content: 'Mercury'; }
+  pre.src-metapost:before { content: 'MetaPost'; }
+  pre.src-modula-2:before { content: 'Modula-2'; }
+  pre.src-pascal:before { content: 'Pascal'; }
+  pre.src-ps:before { content: 'PostScript'; }
+  pre.src-prolog:before { content: 'Prolog'; }
+  pre.src-simula:before { content: 'Simula'; }
+  pre.src-tcl:before { content: 'tcl'; }
+  pre.src-tex:before { content: 'TeX'; }
+  pre.src-plain-tex:before { content: 'Plain TeX'; }
+  pre.src-verilog:before { content: 'Verilog'; }
+  pre.src-vhdl:before { content: 'VHDL'; }
+  pre.src-xml:before { content: 'XML'; }
+  pre.src-nxml:before { content: 'XML'; }
+  /* add a generic configuration mode; LaTeX export needs an additional
+     (add-to-list 'org-latex-listings-langs '(conf " ")) in .emacs */
+  pre.src-conf:before { content: 'Configuration File'; }
+
+  table { border-collapse:collapse; }
+  caption.t-above { caption-side: top; }
+  caption.t-bottom { caption-side: bottom; }
+  td, th { vertical-align:top;  }
+  th.org-right  { text-align: center;  }
+  th.org-left   { text-align: center;   }
+  th.org-center { text-align: center; }
+  td.org-right  { text-align: right;  }
+  td.org-left   { text-align: left;   }
+  td.org-center { text-align: center; }
+  dt { font-weight: bold; }
+  .footpara { display: inline; }
+  .footdef  { margin-bottom: 1em; }
+  .figure { padding: 1em; }
+  .figure p { text-align: center; }
+  .equation-container {
+    display: table;
+    text-align: center;
+    width: 100%;
+  }
+  .equation {
+    vertical-align: middle;
+  }
+  .equation-label {
+    display: table-cell;
+    text-align: right;
+    vertical-align: middle;
+  }
+  .inlinetask {
+    padding: 10px;
+    border: 2px solid gray;
+    margin: 10px;
+    background: #ffffcc;
+  }
+  #org-div-home-and-up
+   { text-align: right; font-size: 70%; white-space: nowrap; }
+  textarea { overflow-x: auto; }
+  .linenr { font-size: smaller }
+  .code-highlighted { background-color: #ffff00; }
+  .org-info-js_info-navigation { border-style: none; }
+  #org-info-js_console-label
+    { font-size: 10px; font-weight: bold; white-space: nowrap; }
+  .org-info-js_search-highlight
+    { background-color: #ffff00; color: #000000; font-weight: bold; }
+  .org-svg { }
+</style>
+</head>
+<body>
+<div id="content" class="content">
+<h1 class="title">Proyecto ICCD32 Arquitectura de Computadores</h1>
+<div id="table-of-contents" role="doc-toc">
+<h2>&Iacute;ndice</h2>
+<div id="text-table-of-contents" role="doc-toc">
+<ul>
+<li><a href="#orgef5b830">1. City Weather APP</a>
+<ul>
+<li><a href="#org6f9c136">1.1. Estructura del proyecto</a></li>
+<li><a href="#orgb81e9cb">1.2. Descripción del código</a>
+<ul>
+<li><a href="#org1a6484b">1.2.1. Código Python</a></li>
+</ul>
+</li>
+<li><a href="#org13e0b73">1.3. 1. Configuración de Constantes</a></li>
+<li><a href="#org674683d">1.4. 2. Función get<sub>weather</sub></a></li>
+<li><a href="#org42ad656">1.5. 3. Función process</a></li>
+<li><a href="#org5229882">1.6. 4. Función write2csv</a></li>
+<li><a href="#org5c5d045">1.7. 5. Función main</a></li>
+<li><a href="#orge69b8b2">1.8. Script ejecutable sh</a></li>
+<li><a href="#org26a7876">1.9. Configuración de Crontab</a></li>
+</ul>
+</li>
+<li><a href="#org295302f">2. Presentación de resultados</a>
+<ul>
+<li><a href="#org6939c75">2.1. Muestra Aleatoria de datos</a></li>
+<li><a href="#org42e3469">2.2. TABLA</a></li>
+<li><a href="#orgacf37c7">2.3. Gráfica Temperatura vs Tiempo</a></li>
+<li><a href="#org877c9fb">2.4. Gráfica de Humedad vs tiempo</a></li>
+<li><a href="#org7757aee">2.5. Mover images a public.</a></li>
+<li><a href="#orgd9f4516">2.6. Carga de datos.</a></li>
+<li><a href="#org53853e8">2.7. Mover las imagenes a public.</a></li>
+</ul>
+</li>
+<li><a href="#org257f760">3. Referencias</a></li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-orgef5b830" class="outline-2">
+<h2 id="orgef5b830"><span class="section-number-2">1.</span> City Weather APP</h2>
+<div class="outline-text-2" id="text-1">
+<p>
+Este es el proyecto de fin de semestre en donde se pretende demostrar
+las destrezas obtenidas durante el transcurso de la asignatura de
+<b><b>Arquitectura de Computadores</b></b>.
+</p>
+
+<ol class="org-ol">
+<li>Conocimientos de sistema operativo Linux</li>
+<li>Conocimientos de Emacs/Jupyter</li>
+<li>Configuración de Entorno para Data Science con Mamba/Anaconda</li>
+<li>Literate Programming</li>
+</ol>
+</div>
+
+<div id="outline-container-org6f9c136" class="outline-3">
+<h3 id="org6f9c136"><span class="section-number-3">1.1.</span> Estructura del proyecto</h3>
+<div class="outline-text-3" id="text-1-1">
+<pre class="example" id="org63e161b">
+.
+├── CityTemperatureAnalysis.ipynb
+├── clima-quito-hoy.csv
+├── get-weather.sh
+├── main.py
+├── output.log
+└── weather-site
+    ├── build-site.el
+    ├── build.sh
+    ├── content
+    │   ├── images
+    │   │   ├── plot.png
+    │   │   └── temperature.png
+    │   ├── index.org
+    │   └── index.org_archive
+    └── public
+        ├── images
+        │   ├── plot.png
+        │   └── temperature.png
+        ├── index.html
+        
+
+5 directories, 18 files
+</pre>
+
+<div class="org-src-container">
+<pre class="src src-shell">mkdir CityWeather
+cd CityWeather
+pwd
+</pre>
+</div>
+
+<pre class="example">
+/home/lorenalopez/CityWeather/weather-site/content/CityWeather
+</pre>
+
+
+<pre class="example">
+/home/lorenalopez/CityWeather
+</pre>
+
+
+<div class="org-src-container">
+<pre class="src src-shell">cd /home/lorenalopez
+mkdir -p CityWeather/weather-site/content
+cd CityWeather
+</pre>
+</div>
+<div class="org-src-container">
+<pre class="src src-shell">cd /home/lorenalopez
+mkdir -p CityWeather/weather-site/public
+cd CityWeather
+</pre>
+</div>
+<div class="org-src-container">
+<pre class="src src-shell">cd /home/lorenalopez
+mkdir -p CityWeather/weather-site/content/images
+cd CityWeather
+</pre>
+</div>
+<div class="org-src-container">
+<pre class="src src-shell">cd /home/lorenalopez
+mkdir -p CityWeather/weather-site/public/images
+cd CityWeather
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orgb81e9cb" class="outline-3">
+<h3 id="orgb81e9cb"><span class="section-number-3">1.2.</span> Descripción del código</h3>
+<div class="outline-text-3" id="text-1-2">
+</div>
+<div id="outline-container-org1a6484b" class="outline-4">
+<h4 id="org1a6484b"><span class="section-number-4">1.2.1.</span> Código Python</h4>
+</div>
+</div>
+
+<div id="outline-container-org13e0b73" class="outline-3">
+<h3 id="org13e0b73"><span class="section-number-3">1.3.</span> 1. Configuración de Constantes</h3>
+<div class="outline-text-3" id="text-1-3">
+<div class="org-src-container">
+<pre class="src src-python">
+MADRID_LAT = 40.4168  # Latitud de Madrid
+MADRID_LONGITUDE = -3.7038  # Longitud de Madrid
+API_KEY = "dd272e4e6c6073d32fc685ff8dc91569"
+FILE_NAME = "/home/lorenalopez/CityWeather/clima-madrid-hoy.csv"
+</pre>
+</div>
+
+<p>
+Define las constantes necesarias para la solicitud a la API, incluyendo las coordenadas de la ciudad, la clave API y el nombre del archivo CSV donde se guardarán los datos.
+</p>
+</div>
+</div>
+
+<div id="outline-container-org674683d" class="outline-3">
+<h3 id="org674683d"><span class="section-number-3">1.4.</span> 2. Función get<sub>weather</sub></h3>
+<div class="outline-text-3" id="text-1-4">
+<div class="org-src-container">
+<pre class="src src-python">def get_weather(lat, lon, api):
+url = f"http://api.openweathermap.org/data/2.5/weather?lat={lat}&amp;lon={lon}&amp;appid={api}&amp;units=metric"
+response = requests.get(url)
+if response.status_code == 200:
+return response.json()
+else:
+return {"cod": response.status_code}
+</pre>
+</div>
+
+<p>
+Construye la URL para la solicitud a la API y realiza una solicitud GET. Devuelve la respuesta en formato JSON si la solicitud es exitosa, o un diccionario con el código de error si la solicitud falla.
+</p>
+</div>
+</div>
+
+<div id="outline-container-org42ad656" class="outline-3">
+<h3 id="org42ad656"><span class="section-number-3">1.5.</span> 3. Función process</h3>
+<div class="outline-text-3" id="text-1-5">
+<div class="org-src-container">
+<pre class="src src-python">def process(json):
+normalized_dict = {
+"Fecha": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+"Temperatura": json["main"]["temp"],
+"Humedad": json["main"]["humidity"],
+"Presión": json["main"]["pressure"],
+"Velocidad del viento": json["wind"]["speed"],
+"dt": json.get("dt", "N/A"),
+"coord_lon": json["coord"].get("lon", "N/A"),
+"coord_lat": json["coord"].get("lat", "N/A"),
+"weather_0_id": json["weather"][0].get("id", "N/A"),
+"weather_0_main": json["weather"][0].get("main", "N/A"),
+"weather_0_description": json["weather"][0].get("description", "N/A"),
+"weather_0_icon": json["weather"][0].get("icon", "N/A"),
+"base": json.get("base", "N/A"),
+"main_temp": json["main"].get("temp", "N/A"),
+"main_feels_like": json["main"].get("feels_like", "N/A"),
+"visibility": json.get("visibility", "N/A"),
+"wind_speed": json["wind"].get("speed", "N/A"),
+"wind_deg": json["wind"].get("deg", "N/A"),
+"clouds_all": json.get("clouds", {}).get("all", "N/A"),
+"sys_type": json.get("sys", {}).get("type", "N/A"),
+"sys_id": json.get("sys", {}).get("id", "N/A"),
+"sys_country": json.get("sys", {}).get("country", "N/A"),
+"sys_sunrise": json.get("sys", {}).get("sunrise", "N/A"),
+"sys_sunset": json.get("sys", {}).get("sunset", "N/A"),
+"timezone": json.get("timezone", "N/A"),
+"id": json.get("id", "N/A"),
+"name": json.get("name", "N/A"),
+"cod": json.get("cod", "N/A"),
+}
+return normalized_dict
+</pre>
+</div>
+
+<p>
+Normaliza los datos JSON obtenidos de la API en un diccionario con campos estándar para ser guardados en el archivo CSV. Incluye la fecha y hora actuales y maneja posibles valores ausentes.
+</p>
+</div>
+</div>
+
+<div id="outline-container-org5229882" class="outline-3">
+<h3 id="org5229882"><span class="section-number-3">1.6.</span> 4. Función write2csv</h3>
+<div class="outline-text-3" id="text-1-6">
+<div class="org-src-container">
+<pre class="src src-python">def write2csv(json_response, csv_filename):
+fieldnames = [
+"Fecha", "Temperatura", "Humedad", "Presión", "Velocidad del viento",
+"dt", "coord_lon", "coord_lat", "weather_0_id", "weather_0_main",
+"weather_0_description", "weather_0_icon", "base", "main_temp",
+"main_feels_like", "visibility", "wind_speed", "wind_deg",
+"clouds_all", "sys_type", "sys_id", "sys_country", "sys_sunrise",
+"sys_sunset", "timezone", "id", "name", "cod"
+]
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org5c5d045" class="outline-3">
+<h3 id="org5c5d045"><span class="section-number-3">1.7.</span> 5. Función main</h3>
+<div class="outline-text-3" id="text-1-7">
+<div class="org-src-container">
+<pre class="src src-python">def main():
+    print("===== Bienvenido a Madrid-Clima =====")
+    madrid_weather = get_weather(lat=MADRID_LAT, lon=MADRID_LONGITUDE, api=API_KEY)
+
+    if madrid_weather['cod'] != 404:
+        processed_weather = process(madrid_weather)
+        write2csv(processed_weather, FILE_NAME)
+        print("Datos climatológicos guardados correctamente en", FILE_NAME)
+    else:
+        print("Ciudad no disponible o API KEY no válida")
+
+if __name__ == '__main__':
+    main()
+</pre>
+</div>
+
+<p>
+Es el punto de entrada del script. Imprime un mensaje de bienvenida, obtiene los datos meteorológicos, los procesa y los guarda en el archivo CSV. Maneja errores en caso de que la ciudad no esté disponible o la clave de API sea inválida.
+</p>
+</div>
+</div>
+
+
+<div id="outline-container-orge69b8b2" class="outline-3">
+<h3 id="orge69b8b2"><span class="section-number-3">1.8.</span> Script ejecutable sh</h3>
+<div class="outline-text-3" id="text-1-8">
+<div class="org-src-container">
+<pre class="src src-shell">which sh
+</pre>
+</div>
+
+<pre class="example">
+/usr/bin/sh
+</pre>
+
+
+<div class="org-src-container">
+<pre class="src src-shell">which mamba
+</pre>
+</div>
+
+<pre class="example">
+/home/lorenalopez/miniforge3/bin/mamba
+</pre>
+
+
+<div class="org-src-container">
+<pre class="src src-shell">touch ~/CityWeather/get-weather.sh
+ls -l ~/CityWeather/get-weather.sh  # Verifica que se haya creado
+</pre>
+</div>
+
+<pre class="example">
+-rwxr-xr-x 1 lorenalopez lorenalopez 173 Feb  7 21:28 /home/lorenalopez/CityWeather/get-weather.sh
+</pre>
+
+
+
+<div class="org-src-container">
+<pre class="src src-shell">echo '#!/usr/bin/sh' &gt; ~/CityWeather/get-weather.sh
+echo 'source /home/lorenalopez/miniforge3/etc/profile.d/conda.sh' &gt;&gt; ~/CityWeather/get-weather.sh
+echo 'eval "$(conda shell.bash hook)"' &gt;&gt; ~/CityWeather/get-weather.sh
+echo 'conda activate iccd332' &gt;&gt; ~/CityWeather/get-weather.sh
+echo 'python /home/lorenalopez/CityWeather/main.py' &gt;&gt; ~/CityWeather/get-weather.sh
+cat ~/CityWeather/get-weather.sh  # Muestra el contenido
+</pre>
+</div>
+
+<pre class="example">
+#!/usr/bin/sh
+source /home/lorenalopez/miniforge3/etc/profile.d/conda.sh
+eval "$(conda shell.bash hook)"
+conda activate iccd332
+python /home/lorenalopez/CityWeather/main.py
+</pre>
+
+
+
+<div class="org-src-container">
+<pre class="src src-shell">chmod +x ~/CityWeather/get-weather.sh
+ls -l ~/CityWeather/get-weather.sh  # Verifica los permisos
+</pre>
+</div>
+
+<pre class="example">
+-rwxr-xr-x 1 lorenalopez lorenalopez 173 Feb  7 21:28 /home/lorenalopez/CityWeather/get-weather.sh
+</pre>
+
+
+<div class="org-src-container">
+<pre class="src src-shell">~/CityWeather/get-weather.sh
+</pre>
+</div>
+
+<pre class="example">
+===== Bienvenido a Madrid-Clima =====
+Datos climatológicos guardados correctamente en /home/lorenalopez/CityWeather/clima-madrid-hoy.csv
+</pre>
+
+
+
+<div class="org-src-container">
+<pre class="src src-shell">chmod +x /home/lorenalopez/CityWeather/get-weather.sh
+</pre>
+</div>
+
+<div class="org-src-container">
+<pre class="src src-shell">ls -l /home/lorenalopez/CityWeather/get-weather.sh #para verificar
+</pre>
+</div>
+
+<pre class="example">
+-rwxr-xr-x 1 lorenalopez lorenalopez 173 Feb  7 21:28 /home/lorenalopez/CityWeather/get-weather.sh
+</pre>
+</div>
+</div>
+
+
+<div id="outline-container-org26a7876" class="outline-3">
+<h3 id="org26a7876"><span class="section-number-3">1.9.</span> Configuración de Crontab</h3>
+<div class="outline-text-3" id="text-1-9">
+<p>
+Se indica la configuración realizada en crontab para la adquisición de datos
+</p>
+
+<div class="org-src-container">
+<pre class="src src-shell">*/15 * * * * /usr/bin/python3 /home/lorenalopez/CityWeather/main.py &gt;&gt; /home/lorenalopez/CityWeather/output.log 2&gt;&amp;1
+</pre>
+</div>
+
+<ul class="org-ul">
+<li>Recuerde remplazar &lt;City&gt; por el nombre de la ciudad que analice</li>
+<li>Recuerde ajustar el tiempo para potenciar tomar datos nuevos</li>
+<li>Recuerde que <code>2&gt;&amp;1</code> permite guardar en <code>output.log</code> tanto la salida
+del programa como los errores en la ejecución.</li>
+</ul>
+</div>
+</div>
+</div>
+<div id="outline-container-org295302f" class="outline-2">
+<h2 id="org295302f"><span class="section-number-2">2.</span> Presentación de resultados</h2>
+<div class="outline-text-2" id="text-2">
+<p>
+Para la pressentación de resultados se utilizan las librerías de Python:
+</p>
+<ul class="org-ul">
+<li>matplotlib</li>
+<li>pandas</li>
+</ul>
+
+<p>
+Alternativamente como pudo estudiar en el Jupyter Notebook
+<a href="https://github.com/LeninGF/EPN-Lectures/blob/main/iccd332ArqComp-2024-A/Proyectos/CityWeather/CityTemperatureAnalysis.ipynb">CityTemperatureAnalysis.ipynb</a>, existen librerías alternativas que se
+pueden utilizar para presentar los resultados gráficos. En ambos
+casos, para que funcione los siguientes bloques de código, es
+necesario que realice la instalación de los paquetes usando <code>mamba
+install &lt;nombre-paquete&gt;</code>
+</p>
+</div>
+
+<div id="outline-container-org6939c75" class="outline-3">
+<h3 id="org6939c75"><span class="section-number-3">2.1.</span> Muestra Aleatoria de datos</h3>
+<div class="outline-text-3" id="text-2-1">
+<p>
+Presentar una muestra de 10 valores aleatorios de los datos obtenidos.
+</p>
+<div class="org-src-container">
+<label class="org-src-name"><span class="listing-number">Listado de programa 1 </span>Lectura de archivo csv</label><pre class="src src-python">import os
+import pandas as pd
+# lectura del archivo csv obtenido
+df = pd.read_csv('/home/lorenalopez/CityWeather/clima-madrid-hoy.csv')
+# se imprime la estructura del dataframe en forma de filas x columnas
+print(df.shape)
+</pre>
+</div>
+
+<p>
+Resultado del número de filas y columnas leídos del archivo csv.
+</p>
+</div>
+</div>
+
+
+<div id="outline-container-org42e3469" class="outline-3">
+<h3 id="org42e3469"><span class="section-number-3">2.2.</span> TABLA</h3>
+<div class="outline-text-3" id="text-2-2">
+<div class="org-src-container">
+<pre class="src src-python"># Convertir la columna Fecha a datetime si aún no lo está
+df["Fecha"] = pd.to_datetime(df["Fecha"], errors="coerce")
+# Ordenar por la fecha más reciente
+df = df.sort_values("Fecha", ascending=False)
+# Seleccionar las últimas 10 filas
+table1 = df.head(10)
+# Convertir todas las columnas a strings para evitar desalineación
+table1 = table1.astype(str)
+# Crear la tabla asegurando que las columnas están alineadas
+table = [list(table1.columns)] + table1.values.tolist()
+table
+</pre>
+</div>
+
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="org-left" />
+
+<col  class="org-right" />
+
+<col  class="org-right" />
+
+<col  class="org-right" />
+
+<col  class="org-right" />
+
+<col  class="org-right" />
+
+<col  class="org-right" />
+
+<col  class="org-right" />
+
+<col  class="org-right" />
+
+<col  class="org-left" />
+
+<col  class="org-left" />
+
+<col  class="org-left" />
+
+<col  class="org-left" />
+
+<col  class="org-right" />
+
+<col  class="org-right" />
+
+<col  class="org-right" />
+
+<col  class="org-right" />
+
+<col  class="org-right" />
+
+<col  class="org-right" />
+
+<col  class="org-right" />
+
+<col  class="org-right" />
+
+<col  class="org-left" />
+
+<col  class="org-right" />
+
+<col  class="org-right" />
+
+<col  class="org-right" />
+
+<col  class="org-right" />
+
+<col  class="org-left" />
+
+<col  class="org-right" />
+</colgroup>
+<tbody>
+<tr>
+<td class="org-left">Fecha</td>
+<td class="org-right">Temperatura</td>
+<td class="org-right">Humedad</td>
+<td class="org-right">Presión</td>
+<td class="org-right">Velocidad del viento</td>
+<td class="org-right">dt</td>
+<td class="org-right">coord<sub>lon</sub></td>
+<td class="org-right">coord<sub>lat</sub></td>
+<td class="org-right">weather<sub>0</sub><sub>id</sub></td>
+<td class="org-left">weather<sub>0</sub><sub>main</sub></td>
+<td class="org-left">weather<sub>0</sub><sub>description</sub></td>
+<td class="org-left">weather<sub>0</sub><sub>icon</sub></td>
+<td class="org-left">base</td>
+<td class="org-right">main<sub>temp</sub></td>
+<td class="org-right">main<sub>feels</sub><sub>like</sub></td>
+<td class="org-right">visibility</td>
+<td class="org-right">wind<sub>speed</sub></td>
+<td class="org-right">wind<sub>deg</sub></td>
+<td class="org-right">clouds<sub>all</sub></td>
+<td class="org-right">sys<sub>type</sub></td>
+<td class="org-right">sys<sub>id</sub></td>
+<td class="org-left">sys<sub>country</sub></td>
+<td class="org-right">sys<sub>sunrise</sub></td>
+<td class="org-right">sys<sub>sunset</sub></td>
+<td class="org-right">timezone</td>
+<td class="org-right">id</td>
+<td class="org-left">name</td>
+<td class="org-right">cod</td>
+</tr>
+
+<tr>
+<td class="org-left">2025-02-07 22:28:20</td>
+<td class="org-right">5.27</td>
+<td class="org-right">95</td>
+<td class="org-right">1019</td>
+<td class="org-right">3.6</td>
+<td class="org-right">1738985241</td>
+<td class="org-right">-3.7038</td>
+<td class="org-right">40.4168</td>
+<td class="org-right">803</td>
+<td class="org-left">Clouds</td>
+<td class="org-left">broken clouds</td>
+<td class="org-left">04n</td>
+<td class="org-left">stations</td>
+<td class="org-right">5.27</td>
+<td class="org-right">2.43</td>
+<td class="org-right">9000</td>
+<td class="org-right">3.6</td>
+<td class="org-right">250</td>
+<td class="org-right">75</td>
+<td class="org-right">2</td>
+<td class="org-right">2084029</td>
+<td class="org-left">ES</td>
+<td class="org-right">1738999015</td>
+<td class="org-right">1739036470</td>
+<td class="org-right">3600</td>
+<td class="org-right">3117735</td>
+<td class="org-left">Madrid</td>
+<td class="org-right">200</td>
+</tr>
+
+<tr>
+<td class="org-left">2025-02-07 22:15:01</td>
+<td class="org-right">5.43</td>
+<td class="org-right">94</td>
+<td class="org-right">1019</td>
+<td class="org-right">3.6</td>
+<td class="org-right">1738984442</td>
+<td class="org-right">-3.7038</td>
+<td class="org-right">40.4168</td>
+<td class="org-right">804</td>
+<td class="org-left">Clouds</td>
+<td class="org-left">overcast clouds</td>
+<td class="org-left">04n</td>
+<td class="org-left">stations</td>
+<td class="org-right">5.43</td>
+<td class="org-right">2.62</td>
+<td class="org-right">8000</td>
+<td class="org-right">3.6</td>
+<td class="org-right">250</td>
+<td class="org-right">100</td>
+<td class="org-right">2</td>
+<td class="org-right">2084029</td>
+<td class="org-left">ES</td>
+<td class="org-right">1738999015</td>
+<td class="org-right">1739036470</td>
+<td class="org-right">3600</td>
+<td class="org-right">6545083</td>
+<td class="org-left">Sol</td>
+<td class="org-right">200</td>
+</tr>
+
+<tr>
+<td class="org-left">2025-02-07 22:01:01</td>
+<td class="org-right">5.43</td>
+<td class="org-right">94</td>
+<td class="org-right">1019</td>
+<td class="org-right">3.6</td>
+<td class="org-right">1738983339</td>
+<td class="org-right">-3.7</td>
+<td class="org-right">40.42</td>
+<td class="org-right">804</td>
+<td class="org-left">Clouds</td>
+<td class="org-left">overcast clouds</td>
+<td class="org-left">04n</td>
+<td class="org-left">stations</td>
+<td class="org-right">5.43</td>
+<td class="org-right">2.62</td>
+<td class="org-right">8000</td>
+<td class="org-right">3.6</td>
+<td class="org-right">250</td>
+<td class="org-right">100</td>
+<td class="org-right">2</td>
+<td class="org-right">2084029</td>
+<td class="org-left">ES</td>
+<td class="org-right">1738999014</td>
+<td class="org-right">1739036469</td>
+<td class="org-right">3600</td>
+<td class="org-right">6545083</td>
+<td class="org-left">Sol</td>
+<td class="org-right">200</td>
+</tr>
+
+<tr>
+<td class="org-left">2025-02-07 21:49:02</td>
+<td class="org-right">5.64</td>
+<td class="org-right">94</td>
+<td class="org-right">1019</td>
+<td class="org-right">3.6</td>
+<td class="org-right">1738982702</td>
+<td class="org-right">-3.7038</td>
+<td class="org-right">40.4168</td>
+<td class="org-right">804</td>
+<td class="org-left">Clouds</td>
+<td class="org-left">overcast clouds</td>
+<td class="org-left">04n</td>
+<td class="org-left">stations</td>
+<td class="org-right">5.64</td>
+<td class="org-right">2.88</td>
+<td class="org-right">8000</td>
+<td class="org-right">3.6</td>
+<td class="org-right">250</td>
+<td class="org-right">100</td>
+<td class="org-right">2</td>
+<td class="org-right">2084029</td>
+<td class="org-left">ES</td>
+<td class="org-right">1738999015</td>
+<td class="org-right">1739036470</td>
+<td class="org-right">3600</td>
+<td class="org-right">6545083</td>
+<td class="org-left">Sol</td>
+<td class="org-right">200</td>
+</tr>
+
+<tr>
+<td class="org-left">2025-02-07 21:28:44</td>
+<td class="org-right">5.27</td>
+<td class="org-right">95</td>
+<td class="org-right">1019</td>
+<td class="org-right">3.6</td>
+<td class="org-right">1738985241</td>
+<td class="org-right">-3.7038</td>
+<td class="org-right">40.4168</td>
+<td class="org-right">803</td>
+<td class="org-left">Clouds</td>
+<td class="org-left">broken clouds</td>
+<td class="org-left">04n</td>
+<td class="org-left">stations</td>
+<td class="org-right">5.27</td>
+<td class="org-right">2.43</td>
+<td class="org-right">9000</td>
+<td class="org-right">3.6</td>
+<td class="org-right">250</td>
+<td class="org-right">75</td>
+<td class="org-right">2</td>
+<td class="org-right">2084029</td>
+<td class="org-left">ES</td>
+<td class="org-right">1738999015</td>
+<td class="org-right">1739036470</td>
+<td class="org-right">3600</td>
+<td class="org-right">3117735</td>
+<td class="org-left">Madrid</td>
+<td class="org-right">200</td>
+</tr>
+
+<tr>
+<td class="org-left">2025-02-07 21:16:01</td>
+<td class="org-right">5.84</td>
+<td class="org-right">94</td>
+<td class="org-right">1019</td>
+<td class="org-right">4.63</td>
+<td class="org-right">1738980748</td>
+<td class="org-right">-3.7</td>
+<td class="org-right">40.42</td>
+<td class="org-right">804</td>
+<td class="org-left">Clouds</td>
+<td class="org-left">overcast clouds</td>
+<td class="org-left">04n</td>
+<td class="org-left">stations</td>
+<td class="org-right">5.84</td>
+<td class="org-right">2.56</td>
+<td class="org-right">9000</td>
+<td class="org-right">4.63</td>
+<td class="org-right">260</td>
+<td class="org-right">100</td>
+<td class="org-right">2</td>
+<td class="org-right">2084029</td>
+<td class="org-left">ES</td>
+<td class="org-right">1738999014</td>
+<td class="org-right">1739036469</td>
+<td class="org-right">3600</td>
+<td class="org-right">6544494</td>
+<td class="org-left">Madrid City Center</td>
+<td class="org-right">200</td>
+</tr>
+
+<tr>
+<td class="org-left">2025-02-07 21:15:02</td>
+<td class="org-right">5.43</td>
+<td class="org-right">94</td>
+<td class="org-right">1019</td>
+<td class="org-right">3.6</td>
+<td class="org-right">1738984442</td>
+<td class="org-right">-3.7038</td>
+<td class="org-right">40.4168</td>
+<td class="org-right">804</td>
+<td class="org-left">Clouds</td>
+<td class="org-left">overcast clouds</td>
+<td class="org-left">04n</td>
+<td class="org-left">stations</td>
+<td class="org-right">5.43</td>
+<td class="org-right">2.62</td>
+<td class="org-right">8000</td>
+<td class="org-right">3.6</td>
+<td class="org-right">250</td>
+<td class="org-right">100</td>
+<td class="org-right">2</td>
+<td class="org-right">2084029</td>
+<td class="org-left">ES</td>
+<td class="org-right">1738999015</td>
+<td class="org-right">1739036470</td>
+<td class="org-right">3600</td>
+<td class="org-right">6545083</td>
+<td class="org-left">Sol</td>
+<td class="org-right">200</td>
+</tr>
+
+<tr>
+<td class="org-left">2025-02-07 21:00:01</td>
+<td class="org-right">5.91</td>
+<td class="org-right">94</td>
+<td class="org-right">1019</td>
+<td class="org-right">4.63</td>
+<td class="org-right">1738979938</td>
+<td class="org-right">-3.7036</td>
+<td class="org-right">40.4167</td>
+<td class="org-right">804</td>
+<td class="org-left">Clouds</td>
+<td class="org-left">overcast clouds</td>
+<td class="org-left">04n</td>
+<td class="org-left">stations</td>
+<td class="org-right">5.91</td>
+<td class="org-right">2.65</td>
+<td class="org-right">9000</td>
+<td class="org-right">4.63</td>
+<td class="org-right">260</td>
+<td class="org-right">100</td>
+<td class="org-right">2</td>
+<td class="org-right">2084029</td>
+<td class="org-left">ES</td>
+<td class="org-right">1738999015</td>
+<td class="org-right">1739036470</td>
+<td class="org-right">3600</td>
+<td class="org-right">6545083</td>
+<td class="org-left">Sol</td>
+<td class="org-right">200</td>
+</tr>
+
+<tr>
+<td class="org-left">2025-02-07 20:45:02</td>
+<td class="org-right">5.64</td>
+<td class="org-right">94</td>
+<td class="org-right">1019</td>
+<td class="org-right">3.6</td>
+<td class="org-right">1738982702</td>
+<td class="org-right">-3.7038</td>
+<td class="org-right">40.4168</td>
+<td class="org-right">804</td>
+<td class="org-left">Clouds</td>
+<td class="org-left">overcast clouds</td>
+<td class="org-left">04n</td>
+<td class="org-left">stations</td>
+<td class="org-right">5.64</td>
+<td class="org-right">2.88</td>
+<td class="org-right">8000</td>
+<td class="org-right">3.6</td>
+<td class="org-right">250</td>
+<td class="org-right">100</td>
+<td class="org-right">2</td>
+<td class="org-right">2084029</td>
+<td class="org-left">ES</td>
+<td class="org-right">1738999015</td>
+<td class="org-right">1739036470</td>
+<td class="org-right">3600</td>
+<td class="org-right">6545083</td>
+<td class="org-left">Sol</td>
+<td class="org-right">200</td>
+</tr>
+
+<tr>
+<td class="org-left">2025-02-07 20:30:01</td>
+<td class="org-right">5.8</td>
+<td class="org-right">95</td>
+<td class="org-right">1019</td>
+<td class="org-right">4.63</td>
+<td class="org-right">1738981080</td>
+<td class="org-right">-3.7026</td>
+<td class="org-right">40.4165</td>
+<td class="org-right">804</td>
+<td class="org-left">Clouds</td>
+<td class="org-left">overcast clouds</td>
+<td class="org-left">04n</td>
+<td class="org-left">stations</td>
+<td class="org-right">5.8</td>
+<td class="org-right">2.51</td>
+<td class="org-right">7000</td>
+<td class="org-right">4.63</td>
+<td class="org-right">260</td>
+<td class="org-right">100</td>
+<td class="org-right">2</td>
+<td class="org-right">2084029</td>
+<td class="org-left">ES</td>
+<td class="org-right">1738999015</td>
+<td class="org-right">1739036470</td>
+<td class="org-right">3600</td>
+<td class="org-right">6545083</td>
+<td class="org-left">Sol</td>
+<td class="org-right">200</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+
+
+
+<div id="outline-container-orgacf37c7" class="outline-3">
+<h3 id="orgacf37c7"><span class="section-number-3">2.3.</span> Gráfica Temperatura vs Tiempo</h3>
+<div class="outline-text-3" id="text-2-3">
+<p>
+Realizar una gráfica de la Temperatura en el tiempo.
+</p>
+
+
+<p>
+El siguiente cógido permite hacer la gráfica de la temperatura vs
+tiempo para Org 9.7+. Para saber que versión dispone puede ejecutar
+<code>M-x org-version</code>
+</p>
+
+<div class="org-src-container">
+<pre class="src src-python">import matplotlib.pyplot as plt
+import matplotlib.dates as mdates
+# Convertir la columna dt a formato de fecha si es necesario
+df["dt"] = pd.to_datetime(df["dt"], unit="s", errors="coerce")
+# Crear la figura con un tamaño adecuado
+fig, ax = plt.subplots(figsize=(10, 6))
+# Graficar la temperatura vs tiempo con mejor estilo
+ax.plot(df["dt"], df["main_temp"], marker="o", linestyle="-", color="red", label="Temperatura")
+# Mejorar la visualización del eje X con fechas más legibles
+ax.xaxis.set_major_locator(mdates.HourLocator(interval=3))  # Mostrar cada 3 horas
+ax.xaxis.set_major_formatter(mdates.DateFormatter("%d-%m %H:%M"))  # Formato: Día-Mes Hora:Minutos
+plt.xticks(rotation=45, ha="right")  # Rotar etiquetas para evitar sobreposición
+plt.title("Gráfica Temperatura vs Tiempo en Madrid", fontsize=14, fontweight="bold")
+plt.xlabel("Fecha y Hora (Hora Local de Madrid)", fontsize=12)
+plt.ylabel("Temperatura (°C)", fontsize=12)
+plt.grid(True, linestyle="--", alpha=0.7)
+plt.legend()
+fig.tight_layout()
+fname = "/home/lorenalopez/CityWeather/weather-site/content/images/temperature.png"
+plt.savefig(fname, dpi=300)
+fname
+</pre>
+</div>
+
+
+<div id="org0bee692" class="figure">
+<p><img src="file:///home/lorenalopez/CityWeather/weather-site/content/images/temperature.png" alt="temperature.png" />
+</p>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org877c9fb" class="outline-3">
+<h3 id="org877c9fb"><span class="section-number-3">2.4.</span> Gráfica de Humedad vs tiempo</h3>
+<div class="outline-text-3" id="text-2-4">
+<div class="org-src-container">
+<pre class="src src-python">import matplotlib.pyplot as plt
+import matplotlib.dates as mdates
+# Convertir la columna dt a formato de fecha si es necesario
+df["dt"] = pd.to_datetime(df["dt"], unit="s", errors="coerce")
+# Crear la figura con un tamaño adecuado
+fig, ax = plt.subplots(figsize=(10, 6))
+ax.plot(df["dt"], df["Humedad"], marker="o", linestyle="-", color="blue", label="Humedad (%)")
+ax.xaxis.set_major_locator(mdates.HourLocator(interval=3))  # Mostrar cada 3 horas
+ax.xaxis.set_major_formatter(mdates.DateFormatter("%d-%m %H:%M"))  # Formato: Día-Mes Hora:Minutos
+plt.xticks(rotation=45, ha="right")  # Rotar etiquetas para evitar sobreposición
+plt.title("Gráfica Humedad vs Tiempo en Madrid", fontsize=14, fontweight="bold")
+plt.xlabel("Fecha y Hora (Hora Local de Madrid)", fontsize=12)
+plt.ylabel("Humedad (%)", fontsize=12)
+plt.grid(True, linestyle="--", alpha=0.7)
+plt.legend()
+fig.tight_layout()
+
+fname = "/home/lorenalopez/CityWeather/weather-site/content/images/humedad_vs_tiempo.png"
+plt.savefig(fname, dpi=300)
+fname
+</pre>
+</div>
+
+
+<div id="orgaf31405" class="figure">
+<p><img src="file:///home/lorenalopez/CityWeather/weather-site/content/images/humedad_vs_tiempo.png" alt="humedad_vs_tiempo.png" />
+</p>
+</div>
+</div>
+</div>
+
+
+<div id="outline-container-org7757aee" class="outline-3">
+<h3 id="org7757aee"><span class="section-number-3">2.5.</span> Mover images a public.</h3>
+<div class="outline-text-3" id="text-2-5">
+<p>
+Debido a que el archivo index.org se abre dentro de la carpeta
+<i>content</i>, y en cambio el servidor http de emacs se ejecuta desde la
+carpeta <i>public</i> es necesario copiar el archivo a la ubicación
+equivalente en <code>/public/images</code>
+</p>
+
+<p>
+Para que las imágenes generadas en content/images estén disponibles en el servidor web
+de Emacs, hay que copiarlas a public/images.
+</p>
+
+
+<div class="org-src-container">
+<pre class="src src-shell">cp -rfv /home/lorenalopez/CityWeather/weather-site/content/images/* /home/lorenalopez/CityWeather/weather-site/public/images/
+</pre>
+</div>
+
+<pre class="example">
+'/home/lorenalopez/CityWeather/weather-site/content/images/humedad_vs_tiempo.png' -&gt; '/home/lorenalopez/CityWeather/weather-site/public/images/humedad_vs_tiempo.png'
+'/home/lorenalopez/CityWeather/weather-site/content/images/temperature.png' -&gt; '/home/lorenalopez/CityWeather/weather-site/public/images/temperature.png'
+</pre>
+
+
+
+
+<p>
+#+begin<sub>src</sub> python :session :results file :exports both
+  import matplotlib.pyplot as plt
+  import matplotlib.dates as mdates
+  import pandas as pd
+</p>
+</div>
+</div>
+
+<div id="outline-container-orgd9f4516" class="outline-3">
+<h3 id="orgd9f4516"><span class="section-number-3">2.6.</span> Carga de datos.</h3>
+<div class="outline-text-3" id="text-2-6">
+<p>
+Este bloque de código se encarga de generar y actualizar las gráficas de <b><b>Temperatura vs Tiempo</b></b>
+y <b><b>Humedad vs Tiempo</b></b> utilizando los datos almacenados en el archivo `clima-madrid-hoy.csv`.
+Debe ejecutarse cada vez que se desee actualizar las gráficas con los datos más recientes. Si se
+cierra Emacs y se vuelve a abrir, es necesario ejecutar nuevamente este bloque para regenerar las
+imágenes. Asimismo, si el archivo de datos ha sido modificado, este código asegurará que las
+gráficas reflejen la información más actualizada.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-python">import matplotlib.pyplot as plt
+import matplotlib.dates as mdates
+import pandas as pd
+
+# Cargar los datos del archivo CSV
+df = pd.read_csv('/home/lorenalopez/CityWeather/clima-madrid-hoy.csv')
+
+# Convertir 'dt' a formato de fecha si está en timestamp
+df['dt'] = pd.to_datetime(df['dt'], unit='s')
+
+# ----------- Gráfico de Temperatura vs Tiempo -----------
+fig, ax = plt.subplots(figsize=(10, 6))
+ax.plot(df['dt'], df['main_temp'], marker="o", linestyle="-", color="red", label="Temperatura")
+
+# Ajustes del eje X y formato de fechas
+ax.xaxis.set_major_locator(mdates.HourLocator(interval=3))
+ax.xaxis.set_major_formatter(mdates.DateFormatter('%d-%m %H:%M'))
+plt.xticks(rotation=45, ha="right")
+
+# Etiquetas y cuadrícula
+plt.title("Gráfica Temperatura vs Tiempo en Madrid")
+plt.xlabel("Fecha y Hora (Hora Local de Madrid)")
+plt.ylabel("Temperatura (°C)")
+plt.grid(True, linestyle="--", alpha=0.7)
+plt.legend()
+
+# Guardar la imagen
+fname_temp = '/home/lorenalopez/CityWeather/weather-site/content/images/temperature.png'
+plt.savefig(fname_temp, dpi=300)
+plt.close(fig)  # Evita que se muestre en Emacs
+
+# ----------- Gráfico de Humedad vs Tiempo -----------
+fig, ax = plt.subplots(figsize=(10, 6))
+ax.plot(df['dt'], df['Humedad'], marker="o", linestyle="-", color="blue", label="Humedad")
+
+# Ajustes del eje X y formato de fechas
+ax.xaxis.set_major_locator(mdates.HourLocator(interval=3))
+ax.xaxis.set_major_formatter(mdates.DateFormatter('%d-%m %H:%M'))
+plt.xticks(rotation=45, ha="right")
+
+# Etiquetas y cuadrícula
+plt.title("Gráfica Humedad vs Tiempo en Madrid")
+plt.xlabel("Fecha y Hora (Hora Local de Madrid)")
+plt.ylabel("Humedad (%)")
+plt.grid(True, linestyle="--", alpha=0.7)
+plt.legend()
+
+# Guardar la imagen
+fname_hum = '/home/lorenalopez/CityWeather/weather-site/content/images/humedad_vs_tiempo.png'
+plt.savefig(fname_hum, dpi=300)
+plt.close(fig)  # Evita que se muestre en Emacs
+
+# Devolver las rutas de las imágenes generadas
+[fname_temp, fname_hum]
+</pre>
+</div>
+
+<p>
+[[file:['/home/lorenalopez/CityWeather/weather-site/content/images/temperature.png', '/home/lorenalopez/CityWeather/weather-site/content/images/humedad<sub>vs</sub><sub>tiempo.png</sub>']]]
+[[file:['/home/lorenalopez/CityWeather/weather-site/content/images/temperature.png', '/home/lorenalopez/CityWeather/weather-site/content/images/humedad<sub>vs</sub><sub>tiempo.png</sub>']]]
+</p>
+</div>
+</div>
+
+
+<div id="outline-container-org53853e8" class="outline-3">
+<h3 id="org53853e8"><span class="section-number-3">2.7.</span> Mover las imagenes a public.</h3>
+<div class="outline-text-3" id="text-2-7">
+<div class="org-src-container">
+<pre class="src src-shell">cp -rfv /home/lorenalopez/CityWeather/weather-site/content/images/*.png /home/lorenalopez/CityWeather/weather-site/public/images/
+</pre>
+</div>
+
+<pre class="example">
+'/home/lorenalopez/CityWeather/weather-site/content/images/humedad_vs_tiempo.png' -&gt; '/home/lorenalopez/CityWeather/weather-site/public/images/humedad_vs_tiempo.png'
+'/home/lorenalopez/CityWeather/weather-site/content/images/temperature.png' -&gt; '/home/lorenalopez/CityWeather/weather-site/public/images/temperature.png'
+</pre>
+</div>
+</div>
+</div>
+
+
+
+<div id="outline-container-org257f760" class="outline-2">
+<h2 id="org257f760"><span class="section-number-2">3.</span> Referencias</h2>
+<div class="outline-text-2" id="text-3">
+<ul class="org-ul">
+<li><a href="https://emacs.stackexchange.com/questions/28715/get-pandas-data-frame-as-a-table-in-org-babel">presentar dataframe como tabla en emacs org</a></li>
+<li><a href="https://orgmode.org/worg/org-contrib/babel/languages/ob-doc-python.html">Python Source Code Blocks in Org Mode</a></li>
+<li><a href="https://systemcrafters.net/publishing-websites-with-org-mode/building-the-site/">Systems Crafters Construir tu sitio web con Modo Emacs Org</a></li>
+<li><a href="https://www.youtube.com/watch?v=AfkrzFodoNw">Vídeo Youtube Build Your Website with Org Mode</a></li>
+</ul>
+</div>
+</div>
+</div>
+<div id="postamble" class="status">
+<p class="date">Fecha: 2025-02-07</p>
+<p class="author">Autor: Lorena Lopez, Matthew Cedeño.</p>
+<p class="date">Created: 2025-02-07 Fri 22:30</p>
+<p class="validation"><a href="https://validator.w3.org/check?uri=referer">Validate</a></p>
+</div>
+</body>
+</html>
